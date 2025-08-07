@@ -172,9 +172,9 @@ class ProductoController extends Controller
         $qty = $request->input('qty', 1); // Valor por defecto para qty
         $carrito = Cart::content();
 
-        $query = Producto::with(['imagenes', 'marca', 'modelos', 'precio', 'categoria'])->orderBy('order', 'asc');
+        $query = Producto::with(['imagenes', 'marca', 'modelos', 'categoria'])->orderBy('order', 'asc');
 
-        if ($request->filled('tipo')) {
+        if ($request->filled('categoria')) {
             $query->where('categoria_id', $request->tipo);
         }
 
@@ -187,14 +187,18 @@ class ProductoController extends Controller
             $query->where('modelo_id', $request->modelo);
         }
 
+        if ($request->filled('motor')) {
+            $query->where('motor_id', $request->modelo);
+        }
+
         // Filtro por código
         if ($request->filled('code')) {
             $query->where('code', 'LIKE', '%' . $request->code . '%');
         }
 
         // Filtro por código OEM
-        if ($request->filled('code_sr')) {
-            $query->where('code_sr', 'LIKE', '%' . $request->code_sr . '%');
+        if ($request->filled('code_oem')) {
+            $query->where('code_oem', 'LIKE', '%' . $request->code_sr . '%');
         }
 
 
@@ -202,7 +206,7 @@ class ProductoController extends Controller
         $productos = $query->paginate(perPage: $perPage);
 
         // Modificar los productos para agregar rowId y qty del carrito
-        /* $productos->getCollection()->transform(function ($producto) use ($carrito, $qty) {
+        $productos->getCollection()->transform(function ($producto) use ($carrito, $qty) {
             // Buscar el item del carrito que corresponde a este producto
             $itemCarrito = $carrito->where('id', $producto->id)->first();
 
@@ -214,11 +218,11 @@ class ProductoController extends Controller
             if ($itemCarrito) {
                 $producto->rowId = $itemCarrito ? $itemCarrito->rowId : null;
                 $producto->qty = $itemCarrito ? $itemCarrito->qty : null;
-                $producto->subtotal =  $itemCarrito ? $itemCarrito->price * ($itemCarrito->qty ?? 1) : $producto->precio->precio;
+                $producto->subtotal =  $itemCarrito ? $itemCarrito->price * ($itemCarrito->qty ?? 1) : $producto->precio;
             } else {
                 $producto->rowId = null;
                 $producto->qty = $qty; // Asignar qty por defecto si no está en el carrito
-                $producto->subtotal = $producto->precio ? $producto->precio->precio * ($producto->qty ?? 1) : 0; // Asignar precio base si no está en el carrito
+                $producto->subtotal = $producto->precio ? $producto->precio * ($producto->qty ?? 1) : 0; // Asignar precio base si no está en el carrito
             }
 
             if ($tieneOfertaVigente) {
@@ -227,16 +231,17 @@ class ProductoController extends Controller
 
 
             return $producto;
-        }); */
+        });
         # si el usuario es vendedor
 
         $categorias = Categoria::orderBy('order', 'asc')->get();
         $marcas = Marca::orderBy('order', 'asc')->get();
         $modelos = Modelo::orderBy('order', 'asc')->get();
+        $motores = Motor::orderBy('order', 'asc')->get();
         $userId = Auth::id();
 
         $productosOferta = Producto::where('oferta', true)
-            ->with(['imagenes', 'marca', 'modelos', 'precio'])
+            ->with(['imagenes', 'marca', 'modelos'])
             ->orderBy('order', 'asc')
             ->get();
 
@@ -244,13 +249,15 @@ class ProductoController extends Controller
             'productos' => $productos,
             'categorias' => $categorias,
             'productosOferta' => $productosOferta,
-            'tipo' => $request->tipo,
+            'categoria' => $request->categoria,
             'marca' => $request->marca,
             'modelo' => $request->modelo,
             'code' => $request->code,
-            'code_sr' => $request->code_sr,
+            'code_oem' => $request->code_oem,
+            'motor' => $request->motor,
             'marcas' => $marcas,
             'modelos' => $modelos,
+            'motores' => $motores,
 
         ]);
     }
@@ -505,6 +512,8 @@ class ProductoController extends Controller
             'marca_id' => 'nullable|exists:marcas,id',
             'motores' => 'nullable|array',
             'motores.*' => 'integer|exists:motors,id',
+            'modelos' => 'nullable|array',
+            'modelos.*' => 'integer|exists:modelos,id',
             // Validaciones de las imágenes (opcionales)
             'images' => 'nullable|array|min:1',
             'images.*' => 'required|file|image',

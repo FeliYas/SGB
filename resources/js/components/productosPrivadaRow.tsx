@@ -77,14 +77,13 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
     return (
         <>
             {/* Vista desktop - tabla */}
-            <div className="grid h-fit grid-cols-11 items-center border-b border-gray-200 py-2 text-[15px] text-black max-sm:hidden">
+            <div className="grid h-fit grid-cols-10 items-center border-b border-gray-200 py-2 text-[15px] text-black max-sm:hidden">
                 <div className="h-[80px] w-[80px] rounded-sm border">
-                    <img src={producto?.imagenes[0]?.image} className="h-full w-full object-contain" alt="" />
+                    <img src={producto?.imagenes[0]?.image} className="h-full w-full rounded-sm object-cover" alt="" />
                 </div>
-                <p className="">{producto?.code_sr}</p>
                 <p className="">{producto?.code}</p>
                 <p className="">{producto?.marca?.name}</p>
-                <p className="">{producto?.modelo?.name}</p>
+                <p className="">{producto?.marca?.name}</p>
                 <p className="">{producto?.categoria?.name}</p>
 
                 {/* mostrar uno debajo del otro */}
@@ -214,17 +213,17 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                             className="border-primary-orange flex h-[36px] w-[36px] items-center justify-center rounded-sm border transition duration-300 hover:scale-95 hover:shadow-sm"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <g clip-path="url(#clip0_9500_465)">
+                                <g clip-path="url(#clip0_11505_945)">
                                     <path
-                                        d="M1.36621 1.36667H2.69954L4.47288 9.64667C4.53793 9.94991 4.70666 10.221 4.95002 10.4132C5.19338 10.6055 5.49615 10.7069 5.80621 10.7H12.3262C12.6297 10.6995 12.9239 10.5955 13.1602 10.4052C13.3966 10.2149 13.561 9.94969 13.6262 9.65334L14.7262 4.7H3.41288M5.99954 14C5.99954 14.3682 5.70107 14.6667 5.33288 14.6667C4.96469 14.6667 4.66621 14.3682 4.66621 14C4.66621 13.6318 4.96469 13.3333 5.33288 13.3333C5.70107 13.3333 5.99954 13.6318 5.99954 14ZM13.3329 14C13.3329 14.3682 13.0344 14.6667 12.6662 14.6667C12.298 14.6667 11.9995 14.3682 11.9995 14C11.9995 13.6318 12.298 13.3333 12.6662 13.3333C13.0344 13.3333 13.3329 13.6318 13.3329 14Z"
-                                        stroke="#0992C9"
+                                        d="M1.3667 1.36667H2.70003L4.47337 9.64667C4.53842 9.94991 4.70715 10.221 4.95051 10.4132C5.19387 10.6055 5.49664 10.7069 5.8067 10.7H12.3267C12.6301 10.6995 12.9244 10.5955 13.1607 10.4052C13.3971 10.2149 13.5615 9.94969 13.6267 9.65334L14.7267 4.7H3.41337M6.00003 14C6.00003 14.3682 5.70156 14.6667 5.33337 14.6667C4.96518 14.6667 4.6667 14.3682 4.6667 14C4.6667 13.6318 4.96518 13.3333 5.33337 13.3333C5.70156 13.3333 6.00003 13.6318 6.00003 14ZM13.3334 14C13.3334 14.3682 13.0349 14.6667 12.6667 14.6667C12.2985 14.6667 12 14.3682 12 14C12 13.6318 12.2985 13.3333 12.6667 13.3333C13.0349 13.3333 13.3334 13.6318 13.3334 14Z"
+                                        stroke="#FF120B"
                                         stroke-width="1.5"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                     />
                                 </g>
                                 <defs>
-                                    <clipPath id="clip0_9500_465">
+                                    <clipPath id="clip0_11505_945">
                                         <rect width="16" height="16" fill="white" />
                                     </clipPath>
                                 </defs>
@@ -407,17 +406,17 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                         ) : (
                             <button onClick={addToCart} className="rounded p-2 text-blue-600 hover:bg-blue-50">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                    <g clip-path="url(#clip0_9500_971)">
+                                    <g clip-path="url(#clip0_11505_945)">
                                         <path
-                                            d="M1.36621 1.36667H2.69954L4.47288 9.64667C4.53793 9.94991 4.70666 10.221 4.95002 10.4132C5.19338 10.6055 5.49615 10.7069 5.80621 10.7H12.3262C12.6297 10.6995 12.9239 10.5955 13.1602 10.4052C13.3966 10.2149 13.561 9.94969 13.6262 9.65334L14.7262 4.7H3.41288M5.99954 14C5.99954 14.3682 5.70107 14.6667 5.33288 14.6667C4.96469 14.6667 4.66621 14.3682 4.66621 14C4.66621 13.6318 4.96469 13.3333 5.33288 13.3333C5.70107 13.3333 5.99954 13.6318 5.99954 14ZM13.3329 14C13.3329 14.3682 13.0344 14.6667 12.6662 14.6667C12.298 14.6667 11.9995 14.3682 11.9995 14C11.9995 13.6318 12.298 13.3333 12.6662 13.3333C13.0344 13.3333 13.3329 13.6318 13.3329 14Z"
-                                            stroke="#0992C9"
+                                            d="M1.3667 1.36667H2.70003L4.47337 9.64667C4.53842 9.94991 4.70715 10.221 4.95051 10.4132C5.19387 10.6055 5.49664 10.7069 5.8067 10.7H12.3267C12.6301 10.6995 12.9244 10.5955 13.1607 10.4052C13.3971 10.2149 13.5615 9.94969 13.6267 9.65334L14.7267 4.7H3.41337M6.00003 14C6.00003 14.3682 5.70156 14.6667 5.33337 14.6667C4.96518 14.6667 4.6667 14.3682 4.6667 14C4.6667 13.6318 4.96518 13.3333 5.33337 13.3333C5.70156 13.3333 6.00003 13.6318 6.00003 14ZM13.3334 14C13.3334 14.3682 13.0349 14.6667 12.6667 14.6667C12.2985 14.6667 12 14.3682 12 14C12 13.6318 12.2985 13.3333 12.6667 13.3333C13.0349 13.3333 13.3334 13.6318 13.3334 14Z"
+                                            stroke="#FF120B"
                                             stroke-width="1.5"
                                             stroke-linecap="round"
                                             stroke-linejoin="round"
                                         />
                                     </g>
                                     <defs>
-                                        <clipPath id="clip0_9500_971">
+                                        <clipPath id="clip0_11505_945">
                                             <rect width="16" height="16" fill="white" />
                                         </clipPath>
                                     </defs>

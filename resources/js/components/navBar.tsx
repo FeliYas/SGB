@@ -75,13 +75,16 @@ const Navbar = () => {
                 {/* Sección derecha: botón de usuario y menú móvil */}
                 <div className="flex items-center gap-4">
                     {/* Botón de usuario */}
-                    <div className="relative">
-                        <button
-                            onClick={() => setUserMenu(!userMenu)}
-                            className="bg-primary-orange hover:text-primary-orange hover:border-primary-orange h-[32px] w-[100px] rounded-sm text-xs text-white transition duration-300 hover:border hover:bg-transparent md:h-[36px] md:w-[117px] md:text-sm"
-                        >
-                            <span className="truncate px-2">{user?.name}</span>
+                    <div className="relative flex flex-col">
+                        <button onClick={() => setUserMenu(!userMenu)} className="">
+                            <span className="absolute -top-5 left-1/2 -translate-x-1/2 transform truncate px-2 text-sm underline">{user?.name}</span>
                         </button>
+                        <Link
+                            href={'/privada/carrito'}
+                            className="bg-primary-orange hover:text-primary-orange hover:border-primary-orange flex h-[32px] w-[100px] items-center justify-center rounded-sm text-xs text-white transition duration-300 hover:border hover:bg-transparent md:h-[36px] md:w-[117px] md:text-sm"
+                        >
+                            <span className="truncate px-2">Carrito</span>
+                        </Link>
                         {userMenu && (
                             <div
                                 ref={userMenuRef}

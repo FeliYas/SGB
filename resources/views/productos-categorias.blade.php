@@ -14,7 +14,7 @@
             <a href={{route('productos', ['tipo' => $categoria->id])}}
                 class="flex flex-col items-center justify-center w-[288px] min-h-[288px] h-fit gap-5 overflow-hidden">
                 <img src="{{ $categoria->image }}" alt="{{ $categoria->name }}"
-                    class="w-full max-h-[288px] object-cover object-center border hover:scale-105 transition duration-300">
+                    class="w-full h-[288px] object-cover object-center border hover:scale-105 transition duration-300">
                 <span class="text-lg uppercase">{{ $categoria->name }}</span>
 
             </a>

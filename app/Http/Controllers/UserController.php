@@ -99,7 +99,7 @@ class UserController extends Controller
             'descuento_tres' => 'nullable|integer|min:0|max:100',
             'rol' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:20',
-            'lista_de_precios_id' => 'sometimes|exists:lista_de_precios,id',
+            'lista_de_precios_id' => 'nullable|sometimes|exists:lista_de_precios,id',
             'autorizado' => 'nullable|boolean',
             'vendedor_id' => 'nullable|sometimes|exists:users,id',
 

@@ -1,250 +1,231 @@
-import { useForm } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 
-const SearchBar = ({ marcas = [], modelos = [], motores = [], categorias = [], filters = {} }) => {
-    const { data, setData, get, processing } = useForm({
-        marca: filters.marca || '',
-        modelo: filters.modelo || '',
-        motor: filters.motor || '',
-        code: filters.code || '',
-        code_oem: filters.codeoem || '',
-        tipo: filters.tipo || '',
+const SearchBar = () => {
+    const { categorias, marcas, modelos, motores, filters } = usePage().props;
+
+    const { data, setData, get } = useForm({
+        categoria: filters?.categoria || '',
+        marca: filters?.marca || '',
+        modelo: filters?.modelo || '',
+        motor: filters?.motor || '',
+        code: filters?.code || '',
+        code_oem: filters?.code_oem || '',
     });
 
+    // Sincronizar el estado cuando cambien los filtros desde el backend
+    useEffect(() => {
+        setData({
+            categoria: filters?.categoria || '',
+            marca: filters?.marca || '',
+            modelo: filters?.modelo || '',
+            code: filters?.code || '',
+            code_oem: filters?.code_oem || '',
+            motor: filters?.motor || '',
+        });
+    }, [filters]);
+
+    // Función para manejar el envío del formulario
     const handleSubmit = (e) => {
         e.preventDefault();
-        get('/productos', {
+        get(route('index.privada.productos'), {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
+    // Función para eliminar un filtro específico
     const removeFilter = (filterName) => {
+        // Actualizar el estado local primero
+        setData(filterName, '');
+
         const newFilters = { ...data };
         delete newFilters[filterName];
 
-        get('/productos', {
-            data: newFilters,
+        // Limpiar filtros vacíos
+        Object.keys(newFilters).forEach((key) => {
+            if (!newFilters[key]) {
+                delete newFilters[key];
+            }
+        });
+
+        router.get(route('index.privada.productos'), newFilters, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
-    const CloseIcon = () => (
-        <svg className="h-4 w-4 max-sm:h-3 max-sm:w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-    );
+    // Componente para el botón de eliminar filtro
+    const ClearFilterButton = ({ filterValue, filterName }) => {
+        if (!filterValue) return null;
+
+        return (
+            <button
+                type="button"
+                onClick={() => removeFilter(filterName)}
+                className="absolute top-1/2 right-5 -translate-y-1/2 transform text-gray-400 transition duration-200 hover:text-red-500"
+                title="Eliminar filtro"
+            >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        );
+    };
 
     return (
-        <div className="flex h-auto min-h-[195px] w-full items-center bg-black py-6 max-lg:min-h-0 max-lg:py-4">
+        <div className="flex min-h-[195px] w-full items-center bg-black py-4 md:h-[195px] md:py-0">
             <form
                 onSubmit={handleSubmit}
-                className="mx-auto flex h-auto w-[1200px] flex-col items-start gap-6 max-xl:w-full max-xl:px-6 max-lg:px-4 max-sm:gap-4 max-sm:px-4 lg:h-[123px] lg:flex-row lg:items-center"
+                className="mx-auto flex h-auto w-full max-w-[1200px] flex-col items-center gap-6 px-4 py-4 md:h-[123px] md:w-[1200px] md:flex-row md:px-0 md:py-0"
             >
-                {/* Sección: Por vehículo / Código */}
-                <div className="flex w-full flex-col gap-4 max-sm:gap-3 lg:w-full">
-                    <h2 className="border-b pb-1 text-[24px] font-bold text-white max-md:text-[20px] max-sm:text-[18px]">Por vehículo / Código</h2>
+                {/* Sección de vehículo/código */}
+                <div className="flex w-full flex-col gap-4 md:w-full">
+                    <h2 className="border-b pb-1 text-[20px] font-bold text-white md:text-[24px]">Por vehículo / Código</h2>
 
-                    {/* Contenedor de campos */}
-                    <div className="grid grid-cols-1 gap-4 max-sm:gap-3 md:grid-cols-2 xl:grid-cols-6">
+                    <div className="flex flex-col gap-4 md:flex-row md:gap-6">
                         {/* Marca */}
                         <div className="flex w-full flex-col gap-2">
-                            <label htmlFor="marca" className="text-[16px] text-white max-sm:text-[14px]">
+                            <label htmlFor="marca" className="text-[14px] text-white md:text-[16px]">
                                 Marca
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline max-sm:text-xs"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="marca"
                                     id="marca"
                                     value={data.marca}
                                     onChange={(e) => setData('marca', e.target.value)}
                                 >
                                     <option value="">Elegir marca</option>
-                                    {marcas.map((marcaItem) => (
-                                        <option key={marcaItem.id} value={marcaItem.id}>
-                                            {marcaItem.name}
+                                    {marcas?.map((marca) => (
+                                        <option key={marca.id} value={marca.id}>
+                                            {marca.name}
                                         </option>
                                     ))}
                                 </select>
-                                {data.marca && (
-                                    <button
-                                        type="button"
-                                        onClick={() => removeFilter('marca')}
-                                        className="absolute top-1/2 right-5 -translate-y-1/2 transform text-gray-400 transition duration-200 hover:text-red-500"
-                                        title="Eliminar filtro"
-                                    >
-                                        <CloseIcon />
-                                    </button>
-                                )}
+                                <ClearFilterButton filterValue={data.marca} filterName="marca" />
                             </div>
                         </div>
 
                         {/* Modelo */}
                         <div className="flex w-full flex-col gap-2">
-                            <label htmlFor="modelo" className="text-[16px] text-white max-sm:text-[14px]">
+                            <label htmlFor="modelo" className="text-[14px] text-white md:text-[16px]">
                                 Modelo
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline max-sm:text-xs"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="modelo"
                                     id="modelo"
                                     value={data.modelo}
                                     onChange={(e) => setData('modelo', e.target.value)}
                                 >
                                     <option value="">Elegir modelo</option>
-                                    {modelos.map((modeloItem) => (
-                                        <option key={modeloItem.id} value={modeloItem.id}>
-                                            {modeloItem.name}
-                                        </option>
-                                    ))}
+                                    {modelos
+                                        ?.filter((mod) => !data.marca || mod?.marca_id == data.marca)
+                                        ?.map((modelo) => (
+                                            <option key={modelo.id} value={modelo.id}>
+                                                {modelo.name}
+                                            </option>
+                                        ))}
                                 </select>
-                                {data.modelo && (
-                                    <button
-                                        type="button"
-                                        onClick={() => removeFilter('modelo')}
-                                        className="absolute top-1/2 right-5 -translate-y-1/2 transform text-gray-400 transition duration-200 hover:text-red-500"
-                                        title="Eliminar filtro"
-                                    >
-                                        <CloseIcon />
-                                    </button>
-                                )}
+                                <ClearFilterButton filterValue={data.modelo} filterName="modelo" />
                             </div>
                         </div>
 
-                        {/* Motor */}
-                        <div className="relative flex flex-col gap-2">
-                            <label htmlFor="motor" className="text-[16px] text-white max-sm:text-[14px]">
+                        <div className="flex w-full flex-col gap-2">
+                            <label htmlFor="motor" className="text-[14px] text-white md:text-[16px]">
                                 Motor
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline max-sm:text-xs"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="motor"
                                     id="motor"
                                     value={data.motor}
                                     onChange={(e) => setData('motor', e.target.value)}
                                 >
-                                    <option value="">Elegir el motor</option>
-                                    {motores.map((motorx) => (
-                                        <option key={motorx.id} value={motorx.id}>
-                                            {motorx.name}
+                                    <option value="">Elegir motor</option>
+                                    {motores?.map((motor) => (
+                                        <option key={motor.id} value={motor.id}>
+                                            {motor.name}
                                         </option>
                                     ))}
                                 </select>
-                                {data.motor && (
-                                    <button
-                                        type="button"
-                                        onClick={() => removeFilter('motor')}
-                                        className="absolute top-1/2 right-5 -translate-y-1/2 transform text-gray-400 transition duration-200 hover:text-red-500"
-                                        title="Eliminar filtro"
-                                    >
-                                        <CloseIcon />
-                                    </button>
-                                )}
+                                <ClearFilterButton filterValue={data.motor} filterName="motor" />
                             </div>
                         </div>
 
                         {/* Código Original */}
                         <div className="flex w-full flex-col gap-2">
-                            <label htmlFor="codigo_original" className="text-[16px] text-white max-sm:text-[14px]">
+                            <label htmlFor="codigo_original" className="text-[14px] text-white md:text-[16px]">
                                 Código
                             </label>
                             <div className="relative">
                                 <input
-                                    value={data.code}
                                     type="text"
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline max-sm:text-xs"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     id="codigo_original"
-                                    name="code"
+                                    name="codigo_original"
                                     placeholder="Ingrese código original"
+                                    value={data.code}
                                     onChange={(e) => setData('code', e.target.value)}
                                 />
-                                {data.code && (
-                                    <button
-                                        type="button"
-                                        onClick={() => removeFilter('code')}
-                                        className="absolute top-1/2 right-5 -translate-y-1/2 transform text-gray-400 transition duration-200 hover:text-red-500"
-                                        title="Eliminar filtro"
-                                    >
-                                        <CloseIcon />
-                                    </button>
-                                )}
+                                <ClearFilterButton filterValue={data.code} filterName="code" />
                             </div>
                         </div>
 
-                        {/* Código Alternativo */}
+                        {/* Código SR33 */}
                         <div className="flex w-full flex-col gap-2">
-                            <label htmlFor="codigo_oem" className="text-[16px] text-white max-sm:text-[14px]">
+                            <label htmlFor="codigo_sr" className="text-[14px] text-white md:text-[16px]">
                                 Código alternativo
                             </label>
                             <div className="relative">
                                 <input
-                                    value={data.code_oem}
                                     type="text"
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline max-sm:text-xs"
-                                    id="codigo_oem"
-                                    name="code_oem"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
+                                    id="codigo_sr"
+                                    name="codigo_sr"
                                     placeholder="Ingrese código sr33"
+                                    value={data.code_oem}
                                     onChange={(e) => setData('code_oem', e.target.value)}
                                 />
-                                {data.code_oem && (
-                                    <button
-                                        type="button"
-                                        onClick={() => removeFilter('code_oem')}
-                                        className="absolute top-1/2 right-5 -translate-y-1/2 transform text-gray-400 transition duration-200 hover:text-red-500"
-                                        title="Eliminar filtro"
-                                    >
-                                        <CloseIcon />
-                                    </button>
-                                )}
+                                <ClearFilterButton filterValue={data.code_oem} filterName="code_oem" />
                             </div>
                         </div>
-
-                        {/* Categoría */}
-                        <div className="relative flex flex-col gap-2">
-                            <label htmlFor="tipo" className="text-[16px] text-white max-sm:text-[14px]">
-                                Categoría
+                        <div className="flex w-full flex-col gap-2">
+                            <label htmlFor="tipo" className="text-[14px] text-white md:text-[16px]">
+                                Categoria
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline max-sm:text-xs"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="tipo"
                                     id="tipo"
-                                    value={data.tipo}
-                                    onChange={(e) => setData('tipo', e.target.value)}
+                                    value={data.categoria}
+                                    onChange={(e) => setData('categoria', e.target.value)}
                                 >
-                                    <option value="">Seleccionar categoria</option>
-                                    {categorias.map((categoria) => (
+                                    <option value="">Elegir la categoria</option>
+                                    {categorias?.map((categoria) => (
                                         <option key={categoria.id} value={categoria.id}>
                                             {categoria.name}
                                         </option>
                                     ))}
                                 </select>
-                                {data.tipo && (
-                                    <button
-                                        type="button"
-                                        onClick={() => removeFilter('tipo')}
-                                        className="absolute top-1/2 right-5 -translate-y-1/2 transform text-gray-400 transition duration-200 hover:text-red-500"
-                                        title="Eliminar filtro"
-                                    >
-                                        <CloseIcon />
-                                    </button>
-                                )}
+                                <ClearFilterButton filterValue={data.categoria} filterName="tipo" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Botón de búsqueda */}
-                <div className="mt-4 flex h-full w-full flex-col items-center justify-end gap-2 lg:mt-0 lg:w-fit lg:items-end">
+                <div className="flex w-full flex-col items-center justify-center gap-2 md:h-full md:w-fit md:items-end md:justify-end">
                     <button
                         type="submit"
-                        disabled={processing}
-                        className="bg-primary-orange hover:bg-primary-orange-dark w-full min-w-[120px] rounded-sm px-6 py-2 text-[16px] font-semibold text-white transition duration-300 disabled:opacity-50 max-sm:min-w-[100px] max-sm:px-4 max-sm:py-1.5 max-sm:text-[14px] lg:w-auto"
+                        className="bg-primary-orange hover:bg-primary-orange-dark w-full rounded-sm px-4 py-2 text-[14px] font-semibold text-white transition duration-300 md:w-auto md:text-[16px]"
                     >
-                        {processing ? 'Buscando...' : 'Buscar'}
+                        Buscar
                     </button>
                 </div>
             </form>

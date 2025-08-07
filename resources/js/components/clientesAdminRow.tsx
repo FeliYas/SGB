@@ -194,7 +194,6 @@ export default function ClientesAdminRow({ cliente }) {
                                 <div className="flex flex-col gap-2">
                                     <label htmlFor="lista">Lista</label>
                                     <select
-                                        required
                                         value={updateForm?.data?.lista_de_precios_id}
                                         onChange={(ev) => updateForm.setData('lista_de_precios_id', ev.target.value)}
                                         className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"

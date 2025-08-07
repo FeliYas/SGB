@@ -120,8 +120,8 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
                 </div>
             )}
 
-            <div className="mb-10 flex flex-col gap-10 max-sm:gap-6">
-                <div className="bg-primary-orange h-[123px] w-full max-sm:h-auto max-sm:py-4">
+            <div className="mb-10 flex flex-col max-sm:gap-6">
+                <div className="bg-primary-orange mt-10 h-[123px] w-full max-sm:h-auto max-sm:py-4">
                     <div className="mx-auto flex h-full w-[1200px] flex-row items-center max-sm:w-full max-sm:flex-col max-sm:gap-4 max-sm:px-4">
                         <p className="w-1/3 text-[24px] font-medium text-white max-sm:w-full max-sm:text-center max-sm:text-[20px]">Compra rápida</p>
                         <form
@@ -147,32 +147,19 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
                     </div>
                 </div>
                 <SearchBar />
-                <div className="mx-auto flex w-[1200px] flex-col gap-2 max-sm:w-full max-sm:px-4">
-                    <div className="flex flex-row justify-end max-sm:justify-end">
-                        <div className="flex flex-row items-center gap-2">
-                            <p className="text-[16px] max-sm:text-[14px]">Vista mostrador</p>
-                            <button
-                                onClick={() => setMargenSwitch(!margenSwitch)}
-                                className={`relative flex h-[15px] w-[28px] items-center rounded-full border bg-gray-200 ${margenSwitch ? 'bg-primary-orange' : ''} transition duration-300`}
-                            >
-                                <div
-                                    className={`broder-2 absolute left-0 h-3 w-3 rounded-full border bg-white ${margenSwitch ? 'translate-x-4' : ''} shadow-lg transition duration-300`}
-                                />
-                            </button>
-                        </div>
-                    </div>
+                <div className="mx-auto mt-10 flex w-[1200px] flex-col gap-2 max-sm:w-full max-sm:px-4">
                     <div className="w-full">
-                        <div className="bg-primary-orange grid h-[52px] grid-cols-11 items-center rounded-t-sm text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
+                        <div className="grid h-[52px] grid-cols-10 items-center rounded-t-sm bg-black text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
                             <p className="max-sm:hidden"></p>
-                            <p className="max-sm:hidden">Cód. SR</p>
-                            <p>Cód. Original</p>
+                            <p className="max-sm:hidden">Código</p>
                             <p>Marca</p>
-                            <p className="">Modelo</p>
-                            <p className="text-center max-sm:hidden">Tipo de producto</p>
+                            <p>Descripcion</p>
+                            <p className="">Categoria</p>
                             <p className="text-right max-sm:hidden">Precio</p>
                             <p className="text-center max-sm:hidden">Descuentos</p>
                             <p className="text-right max-sm:hidden">Precio con descuento</p>
                             <p className="text-center max-sm:hidden">Cantidad</p>
+                            <p className="text-center max-sm:hidden">Stock</p>
                             <p></p>
                         </div>
                         {productos?.data?.map((producto, index) => (

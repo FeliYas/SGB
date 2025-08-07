@@ -41,11 +41,11 @@ class Producto extends Model
         return url("storage/" . $value);
     }
 
-    public function precio()
+    /* public function precio()
     {
         return $this->hasOne(ListaProductos::class, 'producto_id')
             ->where('lista_de_precios_id',  session('cliente_seleccionado') ? session('cliente_seleccionado')->lista_de_precios_id : auth()->user()->lista_de_precios_id ?? null);
-    }
+    } */
 
     public function pedidos()
     {

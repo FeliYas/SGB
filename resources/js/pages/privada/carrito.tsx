@@ -105,7 +105,7 @@ export default function Carrito({
                                     </p>
                                     <Link
                                         href={'/privada/productos'}
-                                        className="bg-primary-orange flex h-[47px] w-[253px] items-center justify-center text-white"
+                                        className="flex h-[47px] w-[253px] items-center justify-center bg-black text-white"
                                     >
                                         VOLVER A PRODUCTOS
                                     </Link>
@@ -117,17 +117,17 @@ export default function Carrito({
 
                 <div className="col-span-2 grid w-full items-start">
                     <div className="w-full">
-                        <div className="bg-primary-orange grid h-[52px] grid-cols-11 items-center rounded-t-sm text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
+                        <div className="grid h-[52px] grid-cols-10 items-center rounded-t-sm bg-black text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
                             <p className="max-sm:hidden"></p>
-                            <p className="max-sm:hidden">Cód. SR</p>
-                            <p>Cód. Original</p>
+                            <p className="max-sm:hidden">Código</p>
                             <p>Marca</p>
-                            <p className="">Modelo</p>
-                            <p className="text-center max-sm:hidden">Tipo de producto</p>
+                            <p>Descripcion</p>
+                            <p className="">Categoria</p>
                             <p className="text-right max-sm:hidden">Precio</p>
                             <p className="text-center max-sm:hidden">Descuentos</p>
                             <p className="text-right max-sm:hidden">Precio con descuento</p>
                             <p className="text-center max-sm:hidden">Cantidad</p>
+                            <p className="text-center max-sm:hidden">Stock</p>
                             <p></p>
                         </div>
                         {productos?.map((producto) => <ProductosPrivadaRow key={producto?.id} producto={producto} />)}
@@ -138,7 +138,7 @@ export default function Carrito({
                     <div className="">
                         <Link
                             href={'/privada/productos'}
-                            className="border-primary-orange text-primary-orange hover:bg-primary-orange h-[47px] rounded-sm border px-5 py-2 font-semibold transition duration-300 hover:text-white"
+                            className="border-primary-orange text-primary-orange h-[47px] rounded-sm border px-5 py-2 font-semibold transition duration-300 hover:bg-black hover:text-white"
                         >
                             Agregar productos
                         </Link>
@@ -146,7 +146,7 @@ export default function Carrito({
                 </div>
 
                 <div className="h-[206px] rounded-sm border max-sm:order-1 max-sm:col-span-2">
-                    <div className="bg-primary-orange rounded-t-sm text-white">
+                    <div className="rounded-t-sm bg-black text-white">
                         <h2 className="p-3 text-xl font-bold">Informacion importante</h2>
                     </div>
                     <div
@@ -158,7 +158,7 @@ export default function Carrito({
                 </div>
 
                 <div className="h-fit w-full rounded-sm border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
-                    <div className="bg-primary-orange rounded-t-sm p-3 text-white">
+                    <div className="rounded-t-sm bg-black p-3 text-white">
                         <h2 className="text-xl font-bold">Entrega</h2>
                     </div>
 
@@ -186,45 +186,23 @@ export default function Carrito({
                         <div
                             className={`flex cursor-pointer items-center justify-between rounded-lg pl-3`}
                             onClick={() => {
-                                setSelectedEnvio('Reparto SR33');
-                                setTipo_entrega_envio('Reparto SR33');
+                                setSelectedEnvio('Reparto SGB / Transporte interior del país');
+                                setTipo_entrega_envio('Reparto SGB / Transporte interior del país');
                             }}
                         >
                             <div className="flex items-center gap-3">
                                 <div
                                     className={`h-5 w-5 rounded-full border-2 ${
-                                        selectedEnvio === 'Reparto SR33'
+                                        selectedEnvio === 'Reparto SGB / Transporte interior del país'
                                             ? 'border-primary-orange flex items-center justify-center'
                                             : 'border-gray-400'
                                     }`}
                                 >
-                                    {selectedEnvio === 'Reparto SR33' && <div className="bg-primary-orange h-[10px] w-[10px] rounded-full"></div>}
-                                </div>
-                                <label className="cursor-pointer">Reparto SR33</label>
-                            </div>
-                        </div>
-
-                        {/* Opción: A convenir */}
-                        <div
-                            className={`flex cursor-pointer items-center rounded-lg pl-3`}
-                            onClick={() => {
-                                setSelectedEnvio('Transporte al interior');
-                                setTipo_entrega_envio('Transporte al interior');
-                            }}
-                        >
-                            <div className="flex items-center gap-3">
-                                <div
-                                    className={`h-5 w-5 rounded-full border-2 ${
-                                        selectedEnvio === 'Transporte al interior'
-                                            ? 'border-primary-orange flex items-center justify-center'
-                                            : 'border-gray-400'
-                                    }`}
-                                >
-                                    {selectedEnvio === 'Transporte al interior' && (
+                                    {selectedEnvio === 'Reparto SGB / Transporte interior del país' && (
                                         <div className="bg-primary-orange h-[10px] w-[10px] rounded-full"></div>
                                     )}
                                 </div>
-                                <label className="cursor-pointer">Transporte al interior</label>
+                                <label className="cursor-pointer">Reparto SGB / Transporte interior del país</label>
                             </div>
                         </div>
                     </div>
@@ -246,8 +224,57 @@ export default function Carrito({
                     ></textarea>
                 </div>
 
+                <div className="h-fit w-full rounded-sm border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
+                    <div className="rounded-t-sm bg-black p-3">
+                        <h2 className="text-xl font-bold text-white">Formas de pago</h2>
+                    </div>
+
+                    <div className="flex h-fit w-full flex-col justify-center gap-4 py-4 text-[18px] text-[#74716A]">
+                        {/* Opción: Retiro Cliente */}
+                        <div
+                            className={`flex cursor-pointer items-center justify-between rounded-lg pl-3`}
+                            onClick={() => {
+                                setSelected('Efectivo');
+                                setTipo_entrega('Efectivo');
+                            }}
+                        >
+                            <div className="flex items-center gap-3">
+                                <div
+                                    className={`h-5 w-5 rounded-full border-2 ${
+                                        selected === 'Efectivo' ? 'border-primary-orange flex items-center justify-center' : 'border-gray-400'
+                                    }`}
+                                >
+                                    {selected === 'Efectivo' && <div className="bg-primary-orange h-[10px] w-[10px] rounded-full"></div>}
+                                </div>
+                                <label className="cursor-pointer">Efectivo</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-3 rounded-sm max-sm:order-4 max-sm:col-span-2">
+                    <h2 className="text-2xl font-bold">Adjuntar un archivo</h2>
+                    <div className="flex w-full items-center justify-between rounded-sm border">
+                        <span className="pl-4 text-gray-600">{pedidoForm?.data?.archivo?.name}</span>
+                        <label
+                            htmlFor="fileInput"
+                            className="text-primary-orange h-full cursor-pointer rounded-r-sm bg-gray-100 p-4 font-semibold hover:bg-gray-200"
+                        >
+                            ADJUNTAR
+                        </label>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            className="hidden"
+                            onChange={(e) => {
+                                pedidoForm.setData('archivo', e.target.files[0]);
+                            }}
+                        />
+                    </div>
+                </div>
+
                 <div className="h-fit rounded-sm border max-sm:order-5 max-sm:col-span-2">
-                    <div className="bg-primary-orange rounded-t-sm text-white">
+                    <div className="rounded-t-sm bg-black text-white">
                         <h2 className="p-3 text-xl font-bold">Pedido</h2>
                     </div>
 
@@ -306,27 +333,7 @@ export default function Carrito({
                         </p>
                     </div>
                 </div>
-                <div className="flex flex-col gap-3 rounded-sm max-sm:order-4 max-sm:col-span-2">
-                    <h2 className="text-2xl font-bold">Adjuntar un archivo</h2>
-                    <div className="flex w-full items-center justify-between rounded-sm border">
-                        <span className="pl-4 text-gray-600">{pedidoForm?.data?.archivo?.name}</span>
-                        <label
-                            htmlFor="fileInput"
-                            className="text-primary-orange h-full cursor-pointer rounded-r-sm bg-gray-100 p-4 font-semibold hover:bg-gray-200"
-                        >
-                            ADJUNTAR
-                        </label>
-                        <input
-                            type="file"
-                            id="fileInput"
-                            className="hidden"
-                            onChange={(e) => {
-                                pedidoForm.setData('archivo', e.target.files[0]);
-                            }}
-                        />
-                    </div>
-                </div>
-
+                <div></div>
                 <div className="flex w-full flex-row items-end gap-3 max-sm:order-6 max-sm:col-span-2">
                     <Link
                         href={route('destroy')}

@@ -32,25 +32,15 @@ class CartController extends Controller
     public function addtocart(Request $request)
     {
 
-
-        $producto = Producto::find($request->id)->with('precio')->first();
-
-
-
-
-        $request->validate([
-            'id' => 'required',
-            'name' => 'required|string',
-            'qty' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0',
-        ]);
+        $producto = Producto::find($request->id)->first();
 
 
         Cart::add(
             $request->id,
             $request->name,
             $request->qty,
-            $producto->precio->precio, // Asegurarse de que el precio sea correcto
+
+            $producto->precio, // Asegurarse de que el precio sea correcto
             0
         );
 

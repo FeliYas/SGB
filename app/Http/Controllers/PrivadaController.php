@@ -31,7 +31,7 @@ class   PrivadaController extends Controller
         $productosIds = $carrito->pluck('id')->toArray();
 
         // Traer todos los productos con esos IDs
-        $productos = Producto::whereIn('id', $productosIds)->with(['imagenes', 'marca', 'modelo', 'precio', 'categoria'])->get();
+        $productos = Producto::whereIn('id', $productosIds)->with(['imagenes', 'marca', 'modelos', 'categoria'])->get();
 
         $productosConRowId = $productos->map(function ($producto) use ($carrito) {
             // Buscar el item del carrito que corresponde a este producto
@@ -46,7 +46,7 @@ class   PrivadaController extends Controller
             // Agregar el rowId al producto
             $producto->rowId = $itemCarrito ? $itemCarrito->rowId : null;
             $producto->qty = $itemCarrito ? $itemCarrito->qty : null;
-            $producto->subtotal = $tieneOfertaVigente ? $producto->precio->precio * (1 - $producto->descuento_oferta / 100) * ($itemCarrito->qty ?? 1) : $producto->precio->precio * ($itemCarrito->qty ?? 1);
+            $producto->subtotal = $tieneOfertaVigente ? $producto->precio * (1 - $producto->descuento_oferta / 100) * ($itemCarrito->qty ?? 1) : $producto->precio * ($itemCarrito->qty ?? 1);
 
             if ($tieneOfertaVigente) {
                 $producto->oferta = true;
