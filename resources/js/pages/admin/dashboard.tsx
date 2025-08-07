@@ -3,13 +3,13 @@ import {
     faBoxArchive,
     faChevronRight,
     faEnvelope,
+    faFile,
     faGear,
     faHouse,
     faImage,
     faLock,
     faNewspaper,
     faShield,
-    faStar,
     faUser,
     faUsers,
 } from '@fortawesome/free-solid-svg-icons';
@@ -75,17 +75,16 @@ export default function Dashboard({ children }) {
                 { title: 'Lista de precios', href: 'listadeprecios' },
             ],
         },
+
         {
-            id: 'calidad',
+            id: 'catalogos',
             open: false,
-            title: 'Calidad',
-            icon: faStar,
-            href: 'calidad',
-            subHref: [
-                { title: 'Contenido', href: 'calidad' },
-                { title: 'Archivos', href: 'archivos' },
-            ],
+            title: 'Catalogos',
+            icon: faFile,
+            href: 'catalogos',
+            subHref: [],
         },
+
         {
             id: 'lanzamientos',
             open: false,
@@ -110,7 +109,10 @@ export default function Dashboard({ children }) {
             href: '#',
             subHref: [
                 { title: 'Clientes', href: 'clientes' },
-                { title: 'Pedidos', href: 'pedidos' },
+                { title: 'Mis pedidos', href: 'pedidos' },
+                { title: 'Cuenta corriente', href: 'cuenta-corriente' },
+                { title: 'Informacion de pagos', href: 'informacion-de-pago' },
+                { title: 'Lista de precios', href: 'lista-de-precios' },
                 { title: 'Carrito', href: 'carrito' },
             ],
         },

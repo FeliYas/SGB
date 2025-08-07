@@ -1,34 +1,33 @@
-import ArchivoCalidadAdminRow from '@/components/catalogoAdminRow';
+import { default as CatalogoAdminRow } from '@/components/catalogoAdminRow';
 import { useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import Dashboard from './dashboard';
 
-export default function MarcasAdmin() {
-    const { archivos } = usePage().props;
+export default function CatalogosAdmin() {
+    const { catalogos } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
         name: '',
     });
 
-    const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const itemsPerPage = 10;
+
     const [createView, setCreateView] = useState(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        post(route('admin.archivos.store'), {
+        post(route('admin.catalogos.store'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Archivo creada correctamente');
+                toast.success('Catalogo creado correctamente');
                 reset();
                 setCreateView(false);
             },
             onError: (errors) => {
-                toast.error('Error al crear archivo');
+                toast.error('Error al crear catalogo');
                 console.log(errors);
             },
         });
@@ -47,7 +46,7 @@ export default function MarcasAdmin() {
                         >
                             <form onSubmit={handleSubmit} method="POST" className="text-black">
                                 <div className="w-[500px] rounded-md bg-white p-4">
-                                    <h2 className="mb-4 text-2xl font-semibold">Cargar archivo</h2>
+                                    <h2 className="mb-4 text-2xl font-semibold">Cargar Catalogo</h2>
                                     <div className="flex flex-col gap-4">
                                         <label htmlFor="ordennn">Orden</label>
                                         <input
@@ -128,11 +127,11 @@ export default function MarcasAdmin() {
                     )}
                 </AnimatePresence>
                 <div className="mx-auto flex w-full flex-col gap-3">
-                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Archivos</h2>
+                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Catalogos</h2>
                     <div className="flex h-fit w-full flex-row gap-5">
                         <input
                             type="text"
-                            placeholder="Buscar archivos..."
+                            placeholder="Buscar catalogo..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full rounded-md border border-gray-300 px-3"
@@ -141,7 +140,7 @@ export default function MarcasAdmin() {
                             onClick={() => setCreateView(true)}
                             className="bg-primary-orange w-[200px] rounded px-4 py-1 font-bold text-white hover:bg-orange-400"
                         >
-                            Cargar Archivo
+                            Cargar Catalogo
                         </button>
                     </div>
 
@@ -159,7 +158,7 @@ export default function MarcasAdmin() {
                                 </tr>
                             </thead>
                             <tbody className="text-center">
-                                {archivos?.map((archivo) => <ArchivoCalidadAdminRow key={archivo.id} archivo={archivo} />)}
+                                {catalogos?.map((catalogo) => <CatalogoAdminRow key={catalogo.id} catalogo={catalogo} />)}
                             </tbody>
                         </table>
                     </div>

@@ -473,7 +473,7 @@ export default function ProductosAdmin() {
                                     <td className="text-center">CATEGORIA</td>
 
                                     <td className="text-center">DESTACADO</td>
-                                    <td className="py-2 text-center">NUEVO</td>
+                                    <td className="py-2 text-center">LANZAMIENTO</td>
                                     <td className="text-center">OFERTA</td>
 
                                     <td className="text-center">EDITAR</td>

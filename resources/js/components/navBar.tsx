@@ -26,9 +26,9 @@ const Navbar = () => {
 
     const privateLinks = [
         { title: 'Productos', href: '/privada/productos' },
-        { title: 'Pedido', href: '/privada/carrito' },
-        { title: 'Márgenes', href: '/privada/margenes' },
         { title: 'Mis pedidos', href: '/privada/pedidos' },
+        { title: 'Cuenta corriente', href: '/privada/cuenta-corriente' },
+        { title: 'Informacion de pagos', href: '/privada/informacion-de-pagos' },
         { title: 'Lista de precios', href: '/privada/lista-de-precios' },
     ];
 

@@ -12,11 +12,14 @@ class Producto extends Model
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
-
-
-    public function modelo()
+    public function modelos()
     {
-        return $this->belongsTo(Modelo::class);
+        return $this->hasMany(ProductoModelo::class);
+    }
+
+    public function motores()
+    {
+        return $this->hasMany(ProductoMotor::class);
     }
     public function marca()
     {

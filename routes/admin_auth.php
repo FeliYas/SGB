@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArchivoCalidadController;
 use App\Http\Controllers\BannerPortadaController;
 use App\Http\Controllers\CalidadController;
+use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\ImagenProductoController;
@@ -98,8 +99,13 @@ Route::middleware('auth:admin')->group(function () {
     Route::delete('admin/novedades/destroy', [NovedadesController::class, 'destroy'])->name('admin.novedades.destroy');
     Route::post('admin/novedades/featured', [NovedadesController::class, 'changeFeatured'])->name('admin.novedades.changeFeatured');
 
-    Route::post('cambiarDestacado', [ProductoController::class, 'cambiarDestacado'])->name('cambiarDestacado');
+    Route::get('admin/catalogos', [CatalogoController::class, 'index'])->name('catalogos.index');
+    Route::post('admin/catalogos', [CatalogoController::class, 'store'])->name('admin.catalogos.store');
+    Route::post('admin/catalogos/update', [CatalogoController::class, 'update'])->name('admin.catalogos.update');
+    Route::delete('admin/catalogos/destroy', [CatalogoController::class, 'destroy'])->name('admin.catalogos.destroy');
 
+    Route::post('cambiarDestacado', [ProductoController::class, 'cambiarDestacado'])->name('cambiarDestacado');
+    Route::post('cambiarNuevo', [ProductoController::class, 'cambiarNuevo'])->name('cambiarNuevo');
     Route::post('cambiarOferta', [ProductoController::class, 'cambiarOferta'])->name('cambiarOferta');
 
 

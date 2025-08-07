@@ -98,7 +98,7 @@ const Slider = () => {
                                 <div className="flex h-full flex-col justify-between pt-6 pb-4 text-white max-sm:h-auto max-sm:items-center max-sm:justify-center max-sm:pt-0 max-sm:pb-0">
                                     <div>
                                         <h2 className="mb-6 text-[32px] font-medium max-sm:mb-4 max-sm:text-[20px] max-sm:leading-tight">
-                                            <span className="">{slide?.descuento_oferta}% </span>de descuento en {slide.name}
+                                            <span className="text-[40px] font-bold">{slide?.descuento}% </span>de descuento en {slide.name}
                                         </h2>
                                         <button
                                             onClick={() => addtocart(slide)}
@@ -110,7 +110,7 @@ const Slider = () => {
                                 </div>
 
                                 <div className="ml-8 flex-shrink-0 max-sm:mt-4 max-sm:ml-0">
-                                    <div className="flex h-32 w-32 items-center justify-center max-sm:h-20 max-sm:w-20">
+                                    <div className="flex h-[200px] items-center justify-center max-sm:h-20 max-sm:w-20">
                                         <img
                                             src={slide?.imagenes[0]?.image}
                                             alt={slide.name}

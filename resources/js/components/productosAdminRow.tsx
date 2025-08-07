@@ -2,27 +2,37 @@ import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import Select from 'react-select';
 import Switch from './Switch';
 
 export default function ProductosAdminRow({ producto }) {
     const [edit, setEdit] = useState(false);
 
-    const { categorias, modelos, marcas } = usePage().props;
+    const { categorias, modelos, marcas, motores } = usePage().props;
 
     const { data, setData, post, reset, errors } = useForm({
         order: producto?.order,
         name: producto?.name,
         code: producto?.code,
-        code_sr: producto?.code_sr,
+        code_oem: producto?.code_oem,
+        destacado: producto?.destacado,
+        nuevo: producto?.nuevo,
+        oferta: producto?.oferta,
+        descuento: producto?.descuento,
+        medidas: producto?.medidas,
+        stock: producto?.stock,
+        precio: producto?.precio,
         categoria_id: producto?.categoria_id,
         marca_id: producto?.marca_id,
-        modelo_id: producto?.modelo_id,
-        desc: producto?.desc,
         unidad_pack: producto?.unidad_pack,
+        modelos: producto?.modelos?.map((modelo) => modelo.modelo_id),
+        motores: producto?.motores?.map((motor) => motor.motor_id),
         id: producto?.id,
     });
+
+    console.log(producto);
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -57,6 +67,19 @@ export default function ProductosAdminRow({ producto }) {
     const [existingImages, setExistingImages] = useState(producto.imagenes || []);
     const [newImagePreviews, setNewImagePreviews] = useState([]);
     const [imagesToDelete, setImagesToDelete] = useState([]);
+    const [modeloSelected, setModeloSelected] = useState([]);
+    const [motorSelected, setMotorSelected] = useState([]);
+
+    useEffect(() => {
+        setData(
+            'modelos',
+            modeloSelected.map((m) => m.value),
+        );
+        setData(
+            'motores',
+            motorSelected.map((m) => m.value),
+        );
+    }, [modeloSelected, motorSelected]);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -109,14 +132,19 @@ export default function ProductosAdminRow({ producto }) {
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{producto?.order}</td>
             <td className="align-middle">{producto?.code}</td>
-            <td className="align-middle">{producto?.code_sr}</td>
+            <td className="align-middle">{producto?.code_oem}</td>
             <td className="align-middle">{producto?.name}</td>
             <td className="align-middle">{producto?.categoria?.name}</td>
-            <td className="align-middle">{producto?.marca?.name}</td>
-            <td className="align-middle">{producto?.modelo?.name}</td>
-
-            <td className="flex h-[90px] flex-row items-center justify-center">
+            <td className="h-[90px]">
                 <Switch routeName="cambiarDestacado" id={producto?.id} status={producto?.destacado == 1} />
+            </td>
+
+            <td className="">
+                <Switch routeName="cambiarNuevo" id={producto?.id} status={producto?.nuevo == 1} />
+            </td>
+
+            <td className="">
+                <Switch routeName="cambiarOferta" id={producto?.id} status={producto?.oferta == 1} />
             </td>
 
             <td className="w-[140px] text-center">
@@ -150,9 +178,10 @@ export default function ProductosAdminRow({ producto }) {
                                     stroke-width="2"
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    className="lucide lucide-pen-icon lucide-pen"
+                                    className="lucide lucide-plus-icon lucide-plus"
                                 >
-                                    <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                                    <path d="M5 12h14" />
+                                    <path d="M12 5v14" />
                                 </svg>
                                 <h2 className="text-2xl font-semibold text-white">Actualizar Producto</h2>
                             </div>
@@ -168,9 +197,7 @@ export default function ProductosAdminRow({ producto }) {
                                         value={data.order}
                                         onChange={(e) => setData('order', e.target.value)}
                                     />
-                                    <label htmlFor="nombree">
-                                        Nombre <span className="text-red-500">*</span>
-                                    </label>
+                                    <label htmlFor="nombree">Nombre</label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="text"
@@ -179,18 +206,8 @@ export default function ProductosAdminRow({ producto }) {
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
                                     />
-                                    <label htmlFor="descripcion">Descripcion</label>
-                                    <textarea
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        name="descripcion"
-                                        id="descripcion"
-                                        value={data.desc}
-                                        onChange={(e) => setData('desc', e.target.value)}
-                                    />
 
-                                    <label htmlFor="code">
-                                        Codigo <span className="text-red-500">*</span>
-                                    </label>
+                                    <label htmlFor="code">Codigo</label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="text"
@@ -200,21 +217,17 @@ export default function ProductosAdminRow({ producto }) {
                                         onChange={(e) => setData('code', e.target.value)}
                                     />
 
-                                    <label htmlFor="code_oem">
-                                        Codigo SR33 <span className="text-red-500">*</span>
-                                    </label>
+                                    <label htmlFor="code_oem">Codigo OEM</label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="text"
                                         name="code_oem"
                                         id="code_oem"
-                                        value={data.code_sr}
-                                        onChange={(e) => setData('code_sr', e.target.value)}
+                                        value={data.code_oem}
+                                        onChange={(e) => setData('code_oem', e.target.value)}
                                     />
 
-                                    <label htmlFor="unidad">
-                                        Unidad por pack <span className="text-red-500">*</span>
-                                    </label>
+                                    <label htmlFor="unidad">Unidad por pack</label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="number"
@@ -224,12 +237,30 @@ export default function ProductosAdminRow({ producto }) {
                                         onChange={(e) => setData('unidad_pack', e.target.value)}
                                     />
 
-                                    <label htmlFor="categoria">
-                                        Tipo de producto <span className="text-red-500">*</span>
-                                    </label>
-                                    <select
+                                    <label htmlFor="descuento">Descuento por oferta</label>
+                                    <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="number"
+                                        name="descuento"
+                                        id="descuento"
+                                        value={data.descuento}
+                                        onChange={(e) => setData('descuento', e.target.value)}
+                                    />
+
+                                    <label htmlFor="medidas">Medidas</label>
+                                    <input
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="text"
+                                        name="medidas"
+                                        id="medidas"
+                                        value={data.medidas}
+                                        onChange={(e) => setData('medidas', e.target.value)}
+                                    />
+
+                                    <label htmlFor="categoria">Categoria</label>
+                                    <select
                                         value={data.categoria_id}
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         onChange={(e) => setData('categoria_id', e.target.value)}
                                         name=""
                                         id=""
@@ -242,12 +273,10 @@ export default function ProductosAdminRow({ producto }) {
                                         ))}
                                     </select>
 
-                                    <label htmlFor="categoria">
-                                        Marcas <span className="text-red-500">*</span>
-                                    </label>
+                                    <label htmlFor="marca">Marcas</label>
                                     <select
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         value={data.marca_id}
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         onChange={(e) => setData('marca_id', e.target.value)}
                                         name=""
                                         id=""
@@ -260,25 +289,67 @@ export default function ProductosAdminRow({ producto }) {
                                         ))}
                                     </select>
 
-                                    <label htmlFor="subcategoria">
-                                        Modelos <span className="text-red-500">*</span>
-                                    </label>
-                                    <select
-                                        value={data.modelo_id}
-                                        onChange={(e) => setData('modelo_id', e.target.value)}
+                                    <label htmlFor="modelo">Modelos</label>
+                                    <Select
+                                        options={modelos
+                                            ?.filter((mod) => mod?.marca_id == data.marca_id)
+                                            ?.map((modelo) => ({
+                                                value: modelo.id,
+                                                label: modelo.name,
+                                            }))}
+                                        defaultValue={producto?.modelos
+                                            ?.map((modelo) => modelo.modelo_id)
+                                            ?.map((modeloId) => {
+                                                const modelo = modelos?.find((m) => m.id == modeloId);
+                                                return modelo ? { value: modelo.id, label: modelo.name } : null;
+                                            })
+                                            .filter(Boolean)}
+                                        onChange={(options) => setModeloSelected(options)}
+                                        className=""
+                                        name="modelo"
+                                        id="modelo"
+                                        isMulti
+                                    />
+
+                                    <label htmlFor="motor">Motores</label>
+                                    <Select
+                                        options={motores?.map((motor) => ({
+                                            value: motor.id,
+                                            label: motor.name,
+                                        }))}
+                                        defaultValue={producto?.motores
+                                            ?.map((motor) => motor.motor_id)
+                                            ?.map((motorId) => {
+                                                const motor = motores?.find((m) => m.id === motorId);
+                                                return motor ? { value: motor.id, label: motor.name } : null;
+                                            })
+                                            .filter(Boolean)}
+                                        onChange={(options) => setMotorSelected(options)}
+                                        className=""
+                                        name="motor"
+                                        id="motor"
+                                        isMulti
+                                    />
+
+                                    <label htmlFor="precio">Precio</label>
+                                    <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        name="modelos"
-                                        id="modelos"
-                                    >
-                                        <option value="">Seleccionar modelo</option>
-                                        {modelos
-                                            .filter((modelo) => modelo?.marca_id == data.marca_id)
-                                            .map((modelo) => (
-                                                <option key={modelo.id} value={modelo.id}>
-                                                    {modelo.name}
-                                                </option>
-                                            ))}
-                                    </select>
+                                        type="number"
+                                        name="precio"
+                                        id="precio"
+                                        value={data.precio}
+                                        onChange={(e) => setData('precio', e.target.value)}
+                                    />
+
+                                    <label htmlFor="stock">Stock</label>
+                                    <input
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="number"
+                                        name="stock"
+                                        id="stock"
+                                        value={data.stock}
+                                        onChange={(e) => setData('stock', e.target.value)}
+                                    />
 
                                     <label>Imágenes del Producto</label>
                                     <input
@@ -356,7 +427,6 @@ export default function ProductosAdminRow({ producto }) {
                                     </div>
                                 </div>
                             </div>
-
                             <div className="bg-primary-orange sticky bottom-0 flex justify-end gap-4 rounded-b-md p-4">
                                 <button
                                     type="button"
@@ -369,7 +439,7 @@ export default function ProductosAdminRow({ producto }) {
                                     type="submit"
                                     className="hover:text-primary-orange rounded-md px-2 py-1 text-white outline outline-white transition duration-300 hover:bg-white"
                                 >
-                                    Actualizar
+                                    Guardar
                                 </button>
                             </div>
                         </form>

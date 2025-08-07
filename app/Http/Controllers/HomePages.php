@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\ArchivoCalidad;
 use App\Models\BannerPortada;
 use App\Models\Calidad;
+use App\Models\Catalogo;
 use App\Models\Categoria;
 use App\Models\Contacto;
 use App\Models\Marca;
 use App\Models\Metadatos;
 use App\Models\Modelo;
+use App\Models\Motor;
 use App\Models\Nosotros;
 use App\Models\Novedades;
 use App\Models\Producto;
@@ -37,10 +39,15 @@ class HomePages extends Controller
         $novedades = Novedades::where('featured', true)->orderBy('order', 'asc')->get();
         $productos = Producto::where('destacado', true)
             ->orderBy('order', 'asc')
-            ->with(['imagenes', 'marca', 'modelo', 'precio', 'categoria'])
+            ->with(['imagenes', 'marca', 'modelos', 'precio', 'categoria'])
+            ->get();
+        $productosLanzamientos = Producto::where('nuevo', true)
+            ->orderBy('order', 'asc')
+            ->with(['imagenes', 'marca', 'modelos', 'precio', 'categoria'])
             ->get();
         $marcas = Marca::orderBy('order', 'asc')->get();
         $modelos = Modelo::orderBy('order', 'asc')->get();
+        $motores = Motor::orderBy('order', 'asc')->get();
 
         return view('home', [
             'sliders' => $sliders,
@@ -52,6 +59,19 @@ class HomePages extends Controller
             'metadatos' => $metadatos,
             'marcas' => $marcas,
             'modelos' => $modelos,
+            'productosLanzamientos' => $productosLanzamientos,
+            'motores' => $motores,
+        ]);
+    }
+
+    public function catalogos()
+    {
+        $metadatos = Metadatos::where('title', 'Catalogos')->first();
+        $catalogos = Catalogo::orderBy('order', 'asc')->get();
+
+        return view('catalogos', [
+            'catalogos' => $catalogos,
+            'metadatos' => $metadatos,
         ]);
     }
 

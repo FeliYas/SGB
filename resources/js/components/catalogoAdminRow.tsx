@@ -6,40 +6,39 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-export default function ArchivoCalidadAdminRow({ archivo }) {
+export default function CatalogoAdminRow({ catalogo }) {
     const [edit, setEdit] = useState(false);
 
     const updateForm = useForm({
-        order: archivo?.order,
-        name: archivo?.name,
-
-        id: archivo?.id,
+        order: catalogo?.order,
+        name: catalogo?.name,
+        id: catalogo?.id,
     });
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        updateForm.post(route('admin.archivos.update'), {
+        updateForm.post(route('admin.catalogos.update'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Archivo actualizada correctamente');
+                toast.success('Catalogo actualizado correctamente');
                 setEdit(false);
             },
             onError: (errors) => {
-                toast.error('Error al actualizar archivo');
+                toast.error('Error al actualizar catalogo');
                 console.log(errors);
             },
         });
     };
 
-    const deleteMarca = () => {
-        if (confirm('¿Estas seguro de eliminar esta publicacion?')) {
-            updateForm.delete(route('admin.archivos.destroy'), {
+    const deleteCatalogo = () => {
+        if (confirm('¿Estas seguro de eliminar este catalogo?')) {
+            updateForm.delete(route('admin.catalogos.destroy'), {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Archivo eliminada correctamente');
+                    toast.success('Catalogo eliminada correctamente');
                 },
                 onError: (errors) => {
-                    toast.error('Error al eliminar archivo');
+                    toast.error('Error al eliminar catalogo');
                     console.log(errors);
                 },
             });
@@ -48,7 +47,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
 
     const handleDownload = async () => {
         try {
-            const filename = archivo?.archivo.split('/').pop();
+            const filename = catalogo?.archivo.split('/').pop();
             // Make a GET request to the download endpoint
             const response = await axios.get(`/descargar/archivo/${filename}`, {
                 responseType: 'blob', // Important for file downloads
@@ -61,7 +60,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'Catalogo'; // Descargar con el nombre original
+            a.download = catalogo?.name || 'Catalogo'; // Descargar con el nombre original
             document.body.appendChild(a);
             a.click();
 
@@ -76,11 +75,11 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
 
     return (
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
-            <td className="align-middle">{archivo?.order}</td>
-            <td className="align-middle">{archivo?.name}</td>
+            <td className="align-middle">{catalogo?.order}</td>
+            <td className="align-middle">{catalogo?.name}</td>
 
             <td className="h-[90px] w-[90px] px-8">
-                <img className="h-full w-full object-contain" src={archivo?.image} alt="" />
+                <img className="h-full w-full object-contain" src={catalogo?.image} alt="" />
             </td>
 
             <td className="align-middle">
@@ -94,7 +93,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
                     <button onClick={() => setEdit(true)} className="h-10 w-10 rounded-md border border-blue-500 px-2 py-1 text-white">
                         <FontAwesomeIcon icon={faPen} size="lg" color="#3b82f6" />
                     </button>
-                    <button onClick={deleteMarca} className="h-10 w-10 rounded-md border border-red-500 px-2 py-1 text-white">
+                    <button onClick={deleteCatalogo} className="h-10 w-10 rounded-md border border-red-500 px-2 py-1 text-white">
                         <FontAwesomeIcon icon={faTrash} size="lg" color="#fb2c36" />
                     </button>
                 </div>
@@ -109,7 +108,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
                     >
                         <form onSubmit={handleUpdate} method="POST" className="text-black">
                             <div className="w-[500px] rounded-md bg-white p-4">
-                                <h2 className="mb-4 text-2xl font-semibold">Actualizar Archivo</h2>
+                                <h2 className="mb-4 text-2xl font-semibold">Actualizar Catalogo</h2>
                                 <div className="flex flex-col gap-4">
                                     <label htmlFor="ordennn">Orden</label>
                                     <input

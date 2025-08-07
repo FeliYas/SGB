@@ -1,5 +1,6 @@
 import ProductosPrivadaRow from '@/components/productosPrivadaRow';
 import SearchBar from '@/components/searchBar';
+import Slider from '@/components/slider';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -80,6 +81,7 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
             <Head>
                 <title>Productos</title>
             </Head>
+            <Slider />
             {vendedorScreen && (
                 <div className="fixed z-[100] flex h-screen w-screen items-center justify-center bg-black/50">
                     <div className="flex h-[218px] w-[476px] items-center justify-center bg-white max-sm:h-auto max-sm:w-[90%] max-sm:p-4">
@@ -119,6 +121,31 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
             )}
 
             <div className="mb-10 flex flex-col gap-10 max-sm:gap-6">
+                <div className="bg-primary-orange h-[123px] w-full max-sm:h-auto max-sm:py-4">
+                    <div className="mx-auto flex h-full w-[1200px] flex-row items-center max-sm:w-full max-sm:flex-col max-sm:gap-4 max-sm:px-4">
+                        <p className="w-1/3 text-[24px] font-medium text-white max-sm:w-full max-sm:text-center max-sm:text-[20px]">Compra rápida</p>
+                        <form
+                            onSubmit={handleFastBuy}
+                            className="grid h-[47px] w-full grid-cols-5 gap-5 max-sm:h-auto max-sm:grid-cols-1 max-sm:gap-3"
+                        >
+                            <input
+                                name="code"
+                                placeholder="Codigo"
+                                type="text"
+                                className="focus:outline-primary-orange col-span-2 rounded-sm bg-white pl-2 transition duration-300 outline-none placeholder:text-black max-sm:col-span-1 max-sm:h-[40px]"
+                            />
+                            <input
+                                name="qty"
+                                placeholder="Cantidad"
+                                type="number"
+                                className="focus:outline-primary-orange col-span-2 rounded-sm bg-white pl-2 transition duration-300 outline-none placeholder:text-black max-sm:col-span-1 max-sm:h-[40px]"
+                            />
+                            <button className="text-primary-orange rounded-sm bg-white font-bold transition duration-300 hover:border hover:border-white hover:bg-transparent hover:text-white max-sm:h-[40px]">
+                                Añadir
+                            </button>
+                        </form>
+                    </div>
+                </div>
                 <SearchBar />
                 <div className="mx-auto flex w-[1200px] flex-col gap-2 max-sm:w-full max-sm:px-4">
                     <div className="flex flex-row justify-end max-sm:justify-end">

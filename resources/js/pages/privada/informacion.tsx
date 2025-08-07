@@ -42,7 +42,7 @@ export default function Informacion() {
             </Head>
             <div className="mx-auto my-20 min-h-[50vh] w-[1200px] max-sm:mx-4 max-sm:my-10 max-sm:w-auto">
                 <div className="flex flex-col gap-5">
-                    <h2 className="text-[44px] font-semibold text-[#1A4791] max-sm:text-[28px]">Información de pagos</h2>
+                    <h2 className="text-[44px] font-semibold text-black max-sm:text-[28px]">Información de pagos</h2>
                     <div className="flex flex-row gap-2 max-sm:flex-col max-sm:gap-4">
                         <div className="flex w-full flex-col gap-2">
                             <h3 className="text-[16px] font-semibold max-sm:text-[14px]">Cuentas bancarias para efectuar el depósito:</h3>
@@ -141,7 +141,7 @@ export default function Informacion() {
                                         <button
                                             type="submit"
                                             disabled={processing}
-                                            className="bg-primary-orange h-[41px] w-[163px] text-white max-sm:w-full"
+                                            className="bg-primary-orange h-[41px] w-[163px] rounded-sm font-bold text-white max-sm:w-full"
                                         >
                                             Enviar
                                         </button>

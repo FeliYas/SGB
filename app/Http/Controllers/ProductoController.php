@@ -37,7 +37,7 @@ class ProductoController extends Controller
         $motores = Motor::orderBy('order', 'asc')->get();
         $perPage = $request->input('per_page',  10);
 
-        $query = Producto::query()->orderBy('order', 'asc')->with(['marca', 'modelo', 'categoria', 'imagenes']);
+        $query = Producto::query()->orderBy('order', 'asc')->with(['marca', 'modelos', 'motores', 'categoria', 'imagenes']);
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -64,11 +64,13 @@ class ProductoController extends Controller
         $categorias = Categoria::orderBy('order', 'asc')->get();
         $marcas = Marca::orderBy('order', 'asc')->get();
         $modelos = Modelo::orderBy('order', 'asc')->get();
+        $motores = Motor::orderBy('order', 'asc')->get();
 
         return view('productos-categorias', [
             'categorias' => $categorias,
             'marcas' => $marcas,
             'modelos' => $modelos,
+            'motores' => $motores,
         ]);
     }
 
@@ -91,14 +93,18 @@ class ProductoController extends Controller
             $query->where('modelo_id', $request->modelo);
         }
 
+        if ($request->filled('motor')) {
+            $query->where('motor_id', $request->motor);
+        }
+
         // Filtro por código
         if ($request->filled('code')) {
             $query->where('code', 'LIKE', '%' . $request->code . '%');
         }
 
         // Filtro por código OEM
-        if ($request->filled('code_sr')) {
-            $query->where('code_sr', 'LIKE', '%' . $request->code_sr . '%');
+        if ($request->filled('code_oem')) {
+            $query->where('code_oem', 'LIKE', '%' . $request->code_oem . '%');
         }
 
 
@@ -106,7 +112,7 @@ class ProductoController extends Controller
         $query->orderBy('order', 'asc');
 
         // Ejecutar query con paginación
-        $productos = $query->with(['marca', 'modelo', 'imagenes', 'categoria'])
+        $productos = $query->with(['marca', 'modelos', 'imagenes', 'categoria'])
             ->paginate(15)
             ->appends($request->query());
 
@@ -119,6 +125,7 @@ class ProductoController extends Controller
         $categorias = Categoria::with('subCategorias')->orderBy('order', 'asc')->get();
         $marcas = Marca::orderBy('order', 'asc')->get();
         $modelos = Modelo::orderBy('order', 'asc')->get();
+        $motores = Motor::orderBy('order', 'asc')->get();
 
         return view('productos', [
             'categorias' => $categorias,
@@ -127,15 +134,18 @@ class ProductoController extends Controller
             'marca' => $request->marca,
             'modelo' => $request->modelo,
             'code' => $request->code,
-            'code_sr' => $request->code_sr,
+            'code_oem' => $request->code_oem,
             'marcas' => $marcas,
             'modelos' => $modelos,
+            'motores' => $motores,
+            'motor' => $request->motor,
+
         ]);
     }
 
     public function show($codigo, Request $request)
     {
-        $producto = Producto::with(['categoria:id,name', 'imagenes', 'marca', 'modelo'])->where('code', $codigo)->first();
+        $producto = Producto::with(['categoria:id,name', 'imagenes', 'marca', 'modelos'])->where('code', $codigo)->first();
 
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
 
@@ -162,7 +172,7 @@ class ProductoController extends Controller
         $qty = $request->input('qty', 1); // Valor por defecto para qty
         $carrito = Cart::content();
 
-        $query = Producto::with(['imagenes', 'marca', 'modelo', 'precio', 'categoria'])->orderBy('order', 'asc');
+        $query = Producto::with(['imagenes', 'marca', 'modelos', 'precio', 'categoria'])->orderBy('order', 'asc');
 
         if ($request->filled('tipo')) {
             $query->where('categoria_id', $request->tipo);
@@ -192,7 +202,7 @@ class ProductoController extends Controller
         $productos = $query->paginate(perPage: $perPage);
 
         // Modificar los productos para agregar rowId y qty del carrito
-        $productos->getCollection()->transform(function ($producto) use ($carrito, $qty) {
+        /* $productos->getCollection()->transform(function ($producto) use ($carrito, $qty) {
             // Buscar el item del carrito que corresponde a este producto
             $itemCarrito = $carrito->where('id', $producto->id)->first();
 
@@ -215,12 +225,9 @@ class ProductoController extends Controller
                 $producto->oferta = true;
             }
 
-            // Aquí puedes agregar más lógica si es necesario, como calcular el subtotal
-            // Agregar el rowId y qty al producto
-            // Calcular subtotal
 
             return $producto;
-        });
+        }); */
         # si el usuario es vendedor
 
         $categorias = Categoria::orderBy('order', 'asc')->get();
@@ -228,20 +235,8 @@ class ProductoController extends Controller
         $modelos = Modelo::orderBy('order', 'asc')->get();
         $userId = Auth::id();
 
-        $productosOferta = Producto::whereHas('ofertas', function ($query) use ($userId) {
-            $query->where('user_id', $userId)
-                ->where('fecha_fin', '>', now());
-        })
-            ->with([
-                'imagenes',
-                'marca',
-                'modelo',
-                'precio',
-                'ofertas' => function ($query) use ($userId) {
-                    $query->where('user_id', $userId)
-                        ->where('fecha_fin', '>', now());
-                }
-            ])
+        $productosOferta = Producto::where('oferta', true)
+            ->with(['imagenes', 'marca', 'modelos', 'precio'])
             ->orderBy('order', 'asc')
             ->get();
 
@@ -672,17 +667,26 @@ class ProductoController extends Controller
         $producto->save();
     }
 
-    public function productoszonaprivada(Request $request)
-    {
-        return inertia('admin/zonaprivadaProductosAdmin');
-    }
-
     public function cambiarOferta(Request $request)
     {
         $producto = Producto::findOrFail($request->id);
         $producto->oferta = !$producto->oferta;
         $producto->save();
     }
+
+    public function cambiarNuevo(Request $request)
+    {
+        $producto = Producto::findOrFail($request->id);
+        $producto->nuevo = !$producto->nuevo;
+        $producto->save();
+    }
+
+    public function productoszonaprivada(Request $request)
+    {
+        return inertia('admin/zonaprivadaProductosAdmin');
+    }
+
+
 
     public function handleQR($code)
     {

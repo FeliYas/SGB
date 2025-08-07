@@ -13,7 +13,7 @@ export default function Switch({ status = false, routeName = '', id }) {
     };
 
     return (
-        <div className="flex items-center">
+        <div className="flex h-full w-full items-center justify-center">
             <button
                 onClick={handleChange}
                 className={`relative flex h-6 w-12 cursor-pointer items-center rounded-full p-1 transition-colors duration-300 ${

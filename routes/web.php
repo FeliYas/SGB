@@ -21,7 +21,7 @@ Route::get('/novedades', [HomePages::class, 'novedades'])->name('novedades');
 Route::get('/contacto', [HomePages::class, 'contacto'])->name('contacto');
 Route::get('/novedades/{id}', [NovedadesController::class, 'novedadesShow'])->name('novedades');
 Route::post('/contacto/sendemail', [ContactoController::class, 'sendContact'])->name('send.contact');
-
+Route::get('/catalogos', [HomePages::class, 'catalogos'])->name('catalogos');
 Route::get('/productos', [ProductoController::class, 'indexVistaPrevia'])->name('productos');
 Route::get('/productos/categorias', [ProductoController::class, 'indexCategorias'])->name('productos.categorias');
 Route::get('/p/{codigo}', [ProductoController::class, 'show'])->name('producto');

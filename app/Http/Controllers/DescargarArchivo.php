@@ -9,7 +9,7 @@ class DescargarArchivo extends Controller
 {
     public function descargarArchivo($filename)
     {
-        $path = storage_path("app/public/images/" . $filename); // Ruta correcta
+        $path = storage_path("app/public/archivos/" . $filename); // Ruta correcta
 
         if (file_exists($path)) {
             return response()->download($path);

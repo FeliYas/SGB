@@ -10,7 +10,7 @@
 
 
         <x-search-bar :categorias="$categorias" :marcas="$marcas" :modelos="$modelos" :tipo="$tipo" :code="$code"
-            :codesr="$code_sr" :marca="$marca" :modelo="$modelo" />
+            :codeoem="$code_oem" :marca="$marca" :modelo="$modelo" :motores="$motores" :motor="$motor" />
 
         <!-- Main content with sidebar and products -->
         <div class="flex flex-col lg:flex-row gap-6 max-sm:gap-4 w-[1200px] max-sm:w-full max-sm:px-4 mx-auto">
@@ -23,7 +23,7 @@
                     @forelse($productos as $producto)
                         <a href="{{ "/p/" . $producto->code }}"
                             class=" transition transform hover:-translate-y-1 hover:shadow-lg duration-300
-                                                                                                                                                                                                                                    h-[420px] max-sm:h-auto flex flex-col w-[288px] max-sm:w-full rounded-sm border border-[#DEDFE0]">
+                                                                                                                                                                                        h-[420px]  flex flex-col w-[288px] max-sm:w-full rounded-sm border border-[#DEDFE0]">
                             <div class="h-full flex flex-col">
                                 @if ($producto->imagenes->count() > 0)
                                     <div class="relative min-h-[287px] max-sm:h-[200px]">
@@ -42,17 +42,8 @@
                                     </div>
                                 @endif
                                 <div class="h-1 bg-[#DEDFE0] mx-3"></div>
-                                <div class="flex flex-col justify-evenly h-full max-sm:p-3 px-3">
-                                    <div class="flex flex-row justify-between">
-                                        <h3
-                                            class="text-black group-hover:text-green-700 text-[16px] max-sm:text-[14px] transition-colors duration-300">
-                                            Cod. Or.: {{ $producto->code }}
-                                        </h3>
-                                        <h3
-                                            class="text-primary-orange group-hover:text-green-700 text-[16px] max-sm:text-[14px] transition-colors duration-300">
-                                            Cod. SR: {{ $producto->code_sr }}
-                                        </h3>
-                                    </div>
+                                <div class="flex flex-col mt-3  h-full max-sm:p-3 px-3">
+                                    <h2 class="text-[14px] font-bold">{{$producto->code}}</h2>
                                     <p
                                         class="text-gray-800 text-[18px] max-sm:text-[14px] font-semibold transition-colors duration-300 ">
                                         {{ $producto->name }}

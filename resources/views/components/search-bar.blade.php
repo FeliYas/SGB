@@ -74,16 +74,16 @@
                     <div class="relative">
                         <select
                             class="rounded-sm bg-white p-2 pr-10 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
-                            name="tipo" id="tipo">
+                            name="motor" id="motor">
                             <option value="">Elegir el motor</option>
-                            @foreach ($categorias as $categoria)
-                                <option value="{{ $categoria->id }}" {{ ($tipo ?? '') == $categoria->id ? 'selected' : '' }}>
-                                    {{ $categoria->name }}
+                            @foreach ($motores as $motorx)
+                                <option value="{{ $motorx->id }}" {{ ($motor ?? '') == $motorx->id ? 'selected' : '' }}>
+                                    {{ $motorx->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @if($tipo ?? '')
-                            <a href="{{ route('productos', array_filter(request()->except('tipo'))) }}"
+                        @if($motor ?? '')
+                            <a href="{{ route('productos', array_filter(request()->except('motor'))) }}"
                                 class="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 transition duration-200"
                                 title="Eliminar filtro">
                                 <svg class="w-4 h-4 max-sm:w-3 max-sm:h-3" fill="none" stroke="currentColor"
