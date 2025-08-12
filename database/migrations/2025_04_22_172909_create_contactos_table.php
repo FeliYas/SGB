@@ -16,9 +16,15 @@ return new class extends Migration
             $table->string('mail')->nullable();
             $table->string('mail_info')->nullable();
             $table->string('mail_pedidos')->nullable();
+            $table->string('mail_adm')->nullable();
+            $table->string('mail_ventas')->nullable();
+            $table->string('mail_tlk')->nullable();
             $table->string('phone')->nullable();
             $table->string('location')->nullable();
             $table->string('wp')->nullable();
+            $table->string('wp_adm')->nullable();
+            $table->string('wp_ventas')->nullable();
+            $table->string('wp_tlk')->nullable();
             $table->string('fb')->nullable();
             $table->string('ig')->nullable();
             $table->timestamps();

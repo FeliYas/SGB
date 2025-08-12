@@ -39,11 +39,11 @@ class HomePages extends Controller
         $novedades = Novedades::where('featured', true)->orderBy('order', 'asc')->get();
         $productos = Producto::where('destacado', true)
             ->orderBy('order', 'asc')
-            ->with(['imagenes', 'marca', 'modelos', 'precio', 'categoria'])
+            ->with(['imagenes', 'marca', 'modelos', 'categoria'])
             ->get();
         $productosLanzamientos = Producto::where('nuevo', true)
             ->orderBy('order', 'asc')
-            ->with(['imagenes', 'marca', 'modelos', 'precio', 'categoria'])
+            ->with(['imagenes', 'marca', 'modelos', 'categoria'])
             ->get();
         $marcas = Marca::orderBy('order', 'asc')->get();
         $modelos = Modelo::orderBy('order', 'asc')->get();

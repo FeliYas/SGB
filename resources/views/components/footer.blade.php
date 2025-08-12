@@ -1,7 +1,7 @@
 {{-- resources/views/components/footer.blade.php --}}
 <div class="flex h-fit w-full flex-col bg-black">
     <div
-        class="mx-auto  h-full w-full max-w-[1200px] grid grid-cols-3 items-start justify-items-start  max-sm:gap-10 px-4 py-10 lg:flex-row lg:items-start  lg:px-0 lg:py-26">
+        class="mx-auto  h-full w-full max-w-[1200px] grid grid-cols-4 gap-x-20 items-start justify-items-start  max-sm:gap-10 px-4 py-10 lg:flex-row lg:items-start  lg:px-0 lg:py-26">
         {{-- Logo y redes sociales --}}
         <div class="flex h-full flex-col items-center gap-4">
             <a href="/">
@@ -108,7 +108,7 @@
 
 
         {{-- Datos de contacto --}}
-        <div class="flex h-full flex-col items-center gap-6 lg:items-start lg:gap-10 ">
+        <div class="flex h-full flex-col items-center gap-6 lg:items-start lg:gap-10 col-span-2 self-center w-full">
             <h2 class="text-lg font-bold text-white">Datos de contacto</h2>
             <div class="grid grid-cols-2  gap-4 w-full">
                 @if(!empty($contacto->location))
@@ -151,9 +151,12 @@
 
 
 
-                @if(!empty($contacto->wp))
-                    <a href="https://wa.me/{{ preg_replace('/\s/', '', $contacto->wp) }}" target="_blank"
-                        rel="noopener noreferrer" class="flex items-center gap-3 transition-opacity hover:opacity-80">
+
+
+                @if(!empty($contacto->wp_adm))
+                    <a href="https://wa.me/{{ preg_replace('/\s/', '', $contacto->wp_adm) }}" target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-3 transition-opacity hover:opacity-80 whitespace-nowrap w-full">
                         <div class="shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path
@@ -161,12 +164,12 @@
                                     fill="#FF120B" />
                             </svg>
                         </div>
-                        <p class="text-base text-white/80 break-words">{{ $contacto->wp }}</p>
+                        <p class="text-base text-white/80 break-words">Administración: {{ $contacto->wp_adm }}</p>
                     </a>
                 @endif
 
-                @if(!empty($contacto->mail))
-                    <a href="mailto:{{ $contacto->mail }}"
+                @if(!empty($contacto->mail_adm))
+                    <a href="mailto:{{ $contacto->mail_adm }}"
                         class="flex items-center gap-3 transition-opacity hover:opacity-80 ">
                         <div class="shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -178,12 +181,12 @@
                                     stroke="#FF120B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <p class="text-base text-white/80 break-words">{{ $contacto->mail }}</p>
+                        <p class="text-base text-white/80 break-words">{{ $contacto->mail_adm }}</p>
                     </a>
                 @endif
 
-                @if(!empty($contacto->wp))
-                    <a href="https://wa.me/{{ preg_replace('/\s/', '', $contacto->wp) }}" target="_blank"
+                @if(!empty($contacto->wp_ventas))
+                    <a href="https://wa.me/{{ preg_replace('/\s/', '', $contacto->wp_ventas) }}" target="_blank"
                         rel="noopener noreferrer" class="flex items-center gap-3 transition-opacity hover:opacity-80">
                         <div class="shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -192,12 +195,12 @@
                                     fill="#FF120B" />
                             </svg>
                         </div>
-                        <p class="text-base text-white/80 break-words">{{ $contacto->wp }}</p>
+                        <p class="text-base text-white/80 break-words">Ventas: {{ $contacto->wp_ventas }}</p>
                     </a>
                 @endif
 
-                @if(!empty($contacto->mail))
-                    <a href="mailto:{{ $contacto->mail }}"
+                @if(!empty($contacto->mail_ventas))
+                    <a href="mailto:{{ $contacto->mail_ventas }}"
                         class="flex items-center gap-3 transition-opacity hover:opacity-80 ">
                         <div class="shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -209,12 +212,12 @@
                                     stroke="#FF120B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <p class="text-base text-white/80 break-words">{{ $contacto->mail }}</p>
+                        <p class="text-base text-white/80 break-words">{{ $contacto->mail_ventas }}</p>
                     </a>
                 @endif
 
-                @if(!empty($contacto->wp))
-                    <a href="https://wa.me/{{ preg_replace('/\s/', '', $contacto->wp) }}" target="_blank"
+                @if(!empty($contacto->wp_tlk))
+                    <a href="https://wa.me/{{ preg_replace('/\s/', '', $contacto->wp_tlk) }}" target="_blank"
                         rel="noopener noreferrer" class="flex items-center gap-3 transition-opacity hover:opacity-80">
                         <div class="shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -223,12 +226,12 @@
                                     fill="#FF120B" />
                             </svg>
                         </div>
-                        <p class="text-base text-white/80 break-words">{{ $contacto->wp }}</p>
+                        <p class="text-base text-white/80 break-words">Telemarketing: {{ $contacto->wp_tlk }}</p>
                     </a>
                 @endif
 
-                @if(!empty($contacto->mail))
-                    <a href="mailto:{{ $contacto->mail }}"
+                @if(!empty($contacto->mail_tlk))
+                    <a href="mailto:{{ $contacto->mail_tlk }}"
                         class="flex items-center gap-3 transition-opacity hover:opacity-80 ">
                         <div class="shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -240,7 +243,7 @@
                                     stroke="#FF120B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <p class="text-base text-white/80 break-words">{{ $contacto->mail }}</p>
+                        <p class="text-base text-white/80 break-words">{{ $contacto->mail_tlk }}</p>
                     </a>
                 @endif
             </div>
