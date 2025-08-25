@@ -2,6 +2,8 @@ import { router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import bannerOferta from '../../images/bannerPrivada.png';
+
 const Slider = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
@@ -62,10 +64,7 @@ const Slider = () => {
     return (
         <div
             className="relative mx-auto h-[232px] w-full max-sm:h-[180px]"
-            style={{
-                background: 'linear-gradient(135deg, #4a90e2 0%, #357abd 50%, #1e5f99 100%)',
-                minHeight: '200px',
-            }}
+            style={{ backgroundImage: `url(${bannerOferta})` }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >

@@ -110,9 +110,9 @@ export default function Dashboard({ children }) {
             subHref: [
                 { title: 'Clientes', href: 'clientes' },
                 { title: 'Mis pedidos', href: 'pedidos' },
-                { title: 'Cuenta corriente', href: 'cuenta-corriente' },
+                /* { title: 'Cuenta corriente', href: 'cuenta-corriente' }, */
                 { title: 'Informacion de pagos', href: 'informacion-de-pago' },
-                { title: 'Lista de precios', href: 'lista-de-precios' },
+                /* { title: 'Lista de precios', href: 'lista-de-precios' }, */
                 { title: 'Carrito', href: 'carrito' },
             ],
         },
