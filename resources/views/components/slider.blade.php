@@ -20,14 +20,14 @@
                         <div
                             class="max-w-[320px] sm:max-w-[400px] lg:max-w-[480px] max-sm:max-w-full text-white flex flex-col gap-10 max-sm:gap-3">
                             <div class="flex flex-col">
-                                <h1 class="text-[40px] max-sm:text-[20px] font-bold w-[727px] max-sm:w-full">
+                                <h1 class="text-[40px] max-sm:text-[20px] font-bold w-[600px] max-sm:w-full">
                                     {{ $slider->title }}
                                 </h1>
                                 <h3 class="text-[20px]">{{$slider->subtitle}}</h3>
                             </div>
 
                             <a href="{{ $slider->link}}"
-                                class="flex justify-center items-center w-[163px] max-sm:w-[130px] h-[41px] max-sm:h-[36px] font-bold border border-white rounded-lg text-[16px] max-sm:text-[14px] hover:text-primary-orange hover:bg-white transition duration-300">Ver
+                                class="flex justify-center items-center w-[163px] max-sm:w-[130px] h-[41px] max-sm:h-[36px] border border-white rounded-lg text-[16px] max-sm:text-[14px] hover:text-primary-orange hover:bg-white transition duration-300">Ver
                                 productos</a>
                         </div>
                         {{-- <a href="{{ route('categorias') }}"

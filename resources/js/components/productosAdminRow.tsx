@@ -22,7 +22,6 @@ export default function ProductosAdminRow({ producto }) {
         oferta: producto?.oferta,
         descuento: producto?.descuento,
         medidas: producto?.medidas,
-        stock: producto?.stock,
         precio: producto?.precio,
         categoria_id: producto?.categoria_id,
         marca_id: producto?.marca_id,
@@ -31,8 +30,6 @@ export default function ProductosAdminRow({ producto }) {
         motores: producto?.motores?.map((motor) => motor.motor_id),
         id: producto?.id,
     });
-
-    console.log(producto);
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -291,12 +288,10 @@ export default function ProductosAdminRow({ producto }) {
 
                                     <label htmlFor="modelo">Modelos</label>
                                     <Select
-                                        options={modelos
-                                            ?.filter((mod) => mod?.marca_id == data.marca_id)
-                                            ?.map((modelo) => ({
-                                                value: modelo.id,
-                                                label: modelo.name,
-                                            }))}
+                                        options={modelos?.map((modelo) => ({
+                                            value: modelo.id,
+                                            label: modelo.name,
+                                        }))}
                                         defaultValue={producto?.modelos
                                             ?.map((modelo) => modelo.modelo_id)
                                             ?.map((modeloId) => {
@@ -339,16 +334,6 @@ export default function ProductosAdminRow({ producto }) {
                                         id="precio"
                                         value={data.precio}
                                         onChange={(e) => setData('precio', e.target.value)}
-                                    />
-
-                                    <label htmlFor="stock">Stock</label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="number"
-                                        name="stock"
-                                        id="stock"
-                                        value={data.stock}
-                                        onChange={(e) => setData('stock', e.target.value)}
                                     />
 
                                     <label>Imágenes del Producto</label>

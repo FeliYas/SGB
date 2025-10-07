@@ -6,8 +6,12 @@
 @section('keywords', $metadatos->keywords ?? "")
 
 @section('content')
-
-    <div class="max-w-[1200px] mx-auto my-20 max-sm:my-10">
+    <div class="mx-auto flex w-full max-w-[1200px] text-black pt-6 text-sm">
+        <a href="/" class="font-bold">Inicio</a>
+        <span class="mx-1">></span>
+        <p class="text-black/80">Novedades</p>
+    </div>
+    <div class="max-w-[1200px] mx-auto mt-12 mb-20 max-sm:mb-10">
         <div class="grid grid-cols-3 gap-6 max-sm:grid-cols-1 max-sm:px-4">
             @foreach($novedades as $novedad)
                 <a href="{{ url('/novedades/' . $novedad->id) }}"

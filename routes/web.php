@@ -59,7 +59,7 @@ Route::get('/agregar-marca', [ProductoController::class, 'agregarMarca']);
 Route::get('/descargar/archivo/{id}', [DescargarArchivo::class, 'descargarArchivo'])
     ->name('descargar.archivo');
 
-
+Route::post('/newsletter/store', [App\Http\Controllers\NewsletterController::class, 'store'])->name('newsletter.store');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

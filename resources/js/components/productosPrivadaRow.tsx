@@ -31,7 +31,7 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
         id: producto?.id,
         name: producto?.code,
         qty: cantidad,
-        price: producto?.precio?.precio,
+        price: producto?.precio,
         rowId: producto?.rowId,
     });
 
@@ -40,7 +40,7 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
             id: producto?.id,
             name: producto?.code,
             qty: cantidad,
-            price: producto?.precio?.precio,
+            price: producto?.precio,
             rowId: producto?.rowId,
         });
     }, [cantidad, producto]);
@@ -77,12 +77,11 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
     return (
         <>
             {/* Vista desktop - tabla */}
-            <div className="grid h-fit grid-cols-10 items-center border-b border-gray-200 py-2 text-[15px] text-black max-sm:hidden">
+            <div className="grid h-fit grid-cols-9 items-center border-b border-gray-200 py-2 text-[15px] text-black max-sm:hidden">
                 <div className="h-[80px] w-[80px] rounded-sm border">
                     <img src={producto?.imagenes[0]?.image} className="h-full w-full rounded-sm object-cover" alt="" />
                 </div>
                 <p className="">{producto?.code}</p>
-                <p className="">{producto?.marca?.name}</p>
                 <p className="">{producto?.marca?.name}</p>
                 <p className="">{producto?.categoria?.name}</p>
 
@@ -90,10 +89,10 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
 
                 {margenSwitch ? (
                     <div className="relative">
-                        <p className="text-right">
+                        <p className="text-center">
                             ${' '}
                             {(
-                                Number(Number(producto?.precio?.precio)) *
+                                Number(producto?.precio) *
                                 (1 + Number(margenes?.general ?? 0) / 100) *
                                 (1 + Number(margenes?.tipos[producto?.categoria?.name] ?? 0) / 100) *
                                 cantidad
@@ -102,9 +101,9 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                                 minimumFractionDigits: 2,
                             })}
                         </p>
-                        <p className="absolute w-full text-right text-gray-400 line-through">
+                        <p className="absolute w-full text-center text-gray-400 line-through">
                             ${' '}
-                            {Number(Number(producto?.precio?.precio) * cantidad)?.toLocaleString('es-AR', {
+                            {Number(producto?.precio * cantidad)?.toLocaleString('es-AR', {
                                 maximumFractionDigits: 2,
                                 minimumFractionDigits: 2,
                             })}
@@ -112,8 +111,8 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                     </div>
                 ) : (
                     <div className="relative">
-                        <p className="text-right">
-                            $ {Number(producto?.precio?.precio)?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                        <p className="text-center">
+                            $ {Number(producto?.precio)?.toLocaleString('es-AR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                         </p>
                     </div>
                 )}
@@ -127,10 +126,10 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
 
                 {margenSwitch ? (
                     <div className="relative">
-                        <p className="text-right">
+                        <p className="text-center">
                             ${' '}
                             {(
-                                Number(producto?.precio?.precio) *
+                                Number(producto?.precio) *
                                 cantidad *
                                 (1 + Number(margenes?.general ?? 0) / 100) *
                                 (1 + Number(margenes?.tipos[producto?.categoria?.name] ?? 0) / 100) *
@@ -142,10 +141,10 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                                 minimumFractionDigits: 2,
                             })}
                         </p>
-                        <p className="absolute w-full text-right text-gray-400 line-through">
+                        <p className="absolute w-full text-center text-gray-400 line-through">
                             ${' '}
                             {(
-                                Number(Number(producto?.precio?.precio)) *
+                                Number(producto?.precio) *
                                 (1 + Number(margenes?.general ?? 0) / 100) *
                                 (1 + Number(margenes?.tipos[producto?.categoria?.name] ?? 0) / 100) *
                                 (1 - Number(user?.descuento_uno) / 100) *
@@ -159,11 +158,11 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                         </p>
                     </div>
                 ) : (
-                    <p className="text-right">
+                    <p className="text-center">
                         ${' '}
                         {user?.descuento_uno &&
                             (
-                                Number(producto?.precio?.precio) *
+                                Number(producto?.precio) *
                                 cantidad *
                                 (1 - Number(user?.descuento_uno) / 100) *
                                 (1 - Number(user?.descuento_dos) / 100) *
@@ -205,7 +204,9 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                             onClick={removeFromCart}
                             className="border-primary-orange flex h-[36px] w-[36px] items-center justify-center rounded-sm border transition duration-300 hover:scale-95 hover:shadow-sm"
                         >
-                            <Trash2 size={16} color="#0992c9" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M2 4H14M12.6667 4V13.3333C12.6667 14 12 14.6667 11.3333 14.6667H4.66667C4 14.6667 3.33333 14 3.33333 13.3333V4M5.33333 4V2.66667C5.33333 2 6 1.33334 6.66667 1.33334H9.33333C10 1.33334 10.6667 2 10.6667 2.66667V4M6.66667 7.33334V11.3333M9.33333 7.33334V11.3333" stroke="#FF120B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                         </button>
                     ) : (
                         <button
@@ -265,10 +266,10 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                 <div className="mb-3">
                     {margenSwitch ? (
                         <div className="relative">
-                            <p className="text-right">
+                            <p className="text-center">
                                 ${' '}
                                 {(
-                                    Number(Number(producto?.precio?.precio)) *
+                                    Number(Number(producto)) *
                                     (1 + Number(margenes?.general ?? 0) / 100) *
                                     (1 + Number(margenes?.tipos[producto?.categoria?.name] ?? 0) / 100) *
                                     cantidad
@@ -277,9 +278,9 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                                     minimumFractionDigits: 2,
                                 })}
                             </p>
-                            <p className="absolute top-0 -left-20 w-full text-right text-gray-400 line-through">
+                            <p className="absolute top-0 -left-20 w-full text-center text-gray-400 line-through">
                                 ${' '}
-                                {Number(Number(producto?.precio?.precio) * cantidad)?.toLocaleString('es-AR', {
+                                {Number(Number(producto?.precio) * cantidad)?.toLocaleString('es-AR', {
                                     maximumFractionDigits: 2,
                                     minimumFractionDigits: 2,
                                 })}
@@ -287,7 +288,7 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                         </div>
                     ) : (
                         <div className="relative">
-                            <p className="text-right">
+                            <p className="text-center">
                                 ${' '}
                                 {Number(producto?.precio?.precio * cantidad)?.toLocaleString('es-AR', {
                                     maximumFractionDigits: 2,
@@ -331,10 +332,10 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                         {/* Subtotal */}
                         {margenSwitch ? (
                             <div className="relative">
-                                <p className="text-right">
+                                <p className="text-center">
                                     ${' '}
                                     {(
-                                        Number(producto?.precio?.precio) *
+                                        Number(producto?.precio) *
                                         cantidad *
                                         (1 + Number(margenes?.general ?? 0) / 100) *
                                         (1 + Number(margenes?.tipos[producto?.categoria?.name] ?? 0) / 100) *
@@ -346,10 +347,10 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                                         minimumFractionDigits: 2,
                                     })}
                                 </p>
-                                <p className="absolute top-0 -left-20 w-full text-right text-gray-400 line-through">
+                                <p className="absolute top-0 -left-20 w-full text-center text-gray-400 line-through">
                                     ${' '}
                                     {(
-                                        Number(Number(producto?.precio?.precio)) *
+                                        Number(Number(producto?.precio)) *
                                         (1 + Number(margenes?.general ?? 0) / 100) *
                                         (1 + Number(margenes?.tipos[producto?.categoria?.name] ?? 0) / 100) *
                                         (1 - Number(user?.descuento_uno) / 100) *
@@ -363,7 +364,7 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                                 </p>
                             </div>
                         ) : (
-                            <p className="relative text-right">
+                            <p className="relative text-center">
                                 <p
                                     className={`absolute -top-3 text-xs font-bold text-green-500 uppercase ${user?.descuento_uno == 0 ? 'hidden' : ''}`}
                                 >
@@ -372,7 +373,7 @@ export default function ProductosPrivadaRow({ producto, margenSwitch, margen }) 
                                 ${' '}
                                 {user?.descuento_uno &&
                                     (
-                                        Number(producto?.precio?.precio) *
+                                        Number(producto?.precio) *
                                         cantidad *
                                         (1 - Number(user?.descuento_uno) / 100) *
                                         (1 - Number(user?.descuento_dos) / 100) *

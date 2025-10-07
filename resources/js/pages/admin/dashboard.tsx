@@ -134,6 +134,14 @@ export default function Dashboard({ children }) {
             subHref: [],
         },
         {
+            id: 'newsletter',
+            open: false,
+            title: 'Newsletter',
+            icon: faEnvelope,
+            href: 'newsletter',
+            subHref: [],
+        },
+        {
             id: 'logos',
             open: false,
             title: 'Logos',

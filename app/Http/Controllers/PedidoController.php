@@ -78,7 +78,7 @@ class PedidoController extends Controller
                 $producto->id,
                 $producto->name,
                 $producto_pedido->cantidad,
-                $producto->precio->precio,
+                $producto->precio,
                 0,
             );
         }

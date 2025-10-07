@@ -1,12 +1,20 @@
 @extends('layouts.default')
 @section('title', 'Productos - SR33')
 
-@section('description', $metadatos->description ?? "")
-@section('keywords', $metadatos->keywords ?? "")
+@section('description', $metadatos->description ?? '')
+@section('keywords', $metadatos->keywords ?? '')
 
 @section('content')
+    <div class="mx-auto flex w-full max-w-[1200px]">
+        <div class="absolute flex text-white pt-2 text-sm z-30">
+            <a href="/" class="font-bold">Inicio</a>
+            <span class="mx-1">></span>
+            <a href={{ route('productos.categorias') }} class="font-bold">Productos</a>
+            <span class="mx-1">></span>
+            <p>{{ $productos[0]->categoria->name }}</p>
+        </div>
+    </div>
     <div class="flex flex-col gap-10 max-sm:gap-6">
-
 
 
         <x-search-bar :categorias="$categorias" :marcas="$marcas" :modelos="$modelos" :tipo="$tipo" :code="$code"
@@ -21,34 +29,19 @@
             <div class="w-full mb-10">
                 <div class="grid grid-cols-1 md:grid-cols-4 max-sm:grid-cols-1 gap-6 max-sm:gap-4">
                     @forelse($productos as $producto)
-                        <a href="{{ "/p/" . $producto->code }}"
-                            class=" transition transform hover:-translate-y-1 hover:shadow-lg duration-300
-                                                                                                                                                                                                h-[420px]  flex flex-col w-[288px] max-sm:w-full rounded-sm border border-[#DEDFE0]">
-                            <div class="h-full flex flex-col">
-                                @if ($producto->imagenes->count() > 0)
-                                    <div class="relative min-h-[287px] max-sm:h-[200px]">
-                                        <img src="{{ $producto->imagenes->first()->image }}" alt="{{ $producto->name }}"
-                                            class=" w-full h-full  object-cover rounded-t-sm">
-                                        <h2
-                                            class="absolute left-3 bottom-2 text-[14px] font-semibold uppercase text-primary-orange">
-                                            {{$producto->categoria->name}}
-                                        </h2>
-                                    </div>
-
-                                @else
-                                    <div
-                                        class="w-full min-h-[243px] max-sm:min-h-[200px] bg-gray-100 flex items-center justify-center text-gray-500 ">
-                                        <span>Sin imagen</span>
-                                    </div>
-                                @endif
-                                <div class="h-1 bg-[#DEDFE0] mx-3"></div>
-                                <div class="flex flex-col mt-3  h-full max-sm:p-3 px-3">
-                                    <h2 class="text-[14px] font-bold">{{$producto->code}}</h2>
-                                    <p
-                                        class="text-gray-800 text-[18px] max-sm:text-[14px] font-semibold transition-colors duration-300 ">
-                                        {{ $producto->name }}
-                                    </p>
-                                </div>
+                        <a href="{{ '/p/' . $producto->code }}"
+                            class=" transition transform hover:-translate-y-1 hover:shadow-lg duration-300 h-[430px] flex flex-col max-sm:w-full rounded-sm border border-[#DEDFE0]">
+                            <div class="w-full h-[287px] overflow-hidden relative">
+                                <img src="{{ $producto->imagenes->first()->image }}" alt="{{ $producto->name }}"
+                                    class="w-full h-[287px] object-contain p-2">
+                                <p class="absolute bottom-3 px-4 text-sm font-bold text-[#FF120B] uppercase">
+                                    {{ $producto->categoria->name }}
+                                </p>
+                                <hr class="flex border-t-1 border-[#DEDFE0] w-[86%] absolute bottom-0 right-0 left-0 mx-4">
+                            </div>
+                            <div class="flex flex-col flex-1 p-4 h-[143px]">
+                                <p class="text-sm font-bold text-gray-800">{{ $producto->code }}</p>
+                                <p class="text-lg text-gray-800 line-clamp-4">{{ $producto->name }}</p>
                             </div>
                         </a>
                     @empty
@@ -59,7 +52,7 @@
                 </div>
 
                 {{-- Enlaces de paginación --}}
-                @if($productos->hasPages())
+                @if ($productos->hasPages())
                     <div class="mt-8 max-sm:mt-6 flex flex-col justify-center my-10">
                         <div class="pagination-wrapper">
                             {{ $productos->links() }}

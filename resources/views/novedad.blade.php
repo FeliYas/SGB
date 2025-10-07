@@ -7,6 +7,13 @@
         <div class="absolute inset-0 w-full h-full bg-black/50 z-10">
 
         </div>
+        <div class="absolute inset-0 top-6 mx-auto flex w-full max-w-[1200px] text-white text-sm z-30">
+            <a href="/" class="font-bold">Inicio</a>
+            <span class="mx-1">></span>
+            <a href="{{ url('/novedades') }}" class="font-bold">Novedades</a>
+            <span class="mx-1">></span>
+            <p class="text-white/80">{{ $novedad->title }}</p>
+        </div>
         <img class="absolute h-full w-full object-cover object-center" src="{{ $novedad->image }}" alt="">
 
 

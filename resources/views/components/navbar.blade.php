@@ -19,43 +19,41 @@
 @endphp
 
 <div x-data="{
-        showModal: false,
-        modalType: 'login',
-        scrolled: false,
-        searchOpen: false,
-        mobileMenuOpen: false,
-        logoPrincipal: '{{ $logos->logo_principal ?? '' }}',
-        logoSecundario: '{{ $logos->logo_secundario ?? '' }}',
-        switchToLogin() {
-            this.modalType = 'login';
-        },
-        switchToRegister() {
-            this.modalType = 'register';
-        },
-        openModal(type = 'login') {
-            this.modalType = type;
-            this.showModal = true;
-        },
-        closeModal() {
-            this.showModal = false;
-        },
-        toggleMobileMenu() {
-            this.mobileMenuOpen = !this.mobileMenuOpen;
-        }
-    }" x-init="
-        @if ($isHome)
-            window.addEventListener('scroll', () => {
+    showModal: false,
+    modalType: 'login',
+    scrolled: false,
+    searchOpen: false,
+    mobileMenuOpen: false,
+    logoPrincipal: '{{ $logos->logo_principal ?? '' }}',
+    logoSecundario: '{{ $logos->logo_secundario ?? '' }}',
+    switchToLogin() {
+        this.modalType = 'login';
+    },
+    switchToRegister() {
+        this.modalType = 'register';
+    },
+    openModal(type = 'login') {
+        this.modalType = type;
+        this.showModal = true;
+    },
+    closeModal() {
+        this.showModal = false;
+    },
+    toggleMobileMenu() {
+        this.mobileMenuOpen = !this.mobileMenuOpen;
+    }
+}" x-init="@if ($isHome) window.addEventListener('scroll', () => {
                 scrolled = window.scrollY > 0;
             });
         @else
-            scrolled = true;
-        @endif
-    " :class="{
+            scrolled = true; @endif"
+    :class="{
         'bg-white shadow-md': scrolled || !{{ $isHome ? 'true' : 'false' }},
         'bg-transparent': !scrolled && {{ $isHome ? 'true' : 'false' }},
         'fixed top-0': {{ $isHome ? 'true' : 'false' }},
         'sticky top-0': {{ $isHome ? 'false' : 'true' }}
-    }" class="z-50 sticky top-0 w-full transition-colors duration-300 h-[100px] max-sm:h-auto flex flex-col">
+    }"
+    class="z-50 sticky top-0 w-full transition-colors duration-300 h-[100px] max-sm:h-auto flex flex-col">
 
     <!-- Franja superior -->
 
@@ -73,10 +71,16 @@
 
         <!-- Navegación desktop -->
         <div class="hidden lg:flex gap-8 max-xl:gap-6 items-center">
-            @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
+            @foreach ($isPrivate ? $privateLinks : $defaultLinks as $link)
+                @php
+                    $currentPath = '/' . request()->path();
+                    $linkPath = $link['href'];
+                    $isActive =
+                        $currentPath === $linkPath || ($linkPath !== '/' && str_starts_with($currentPath, $linkPath));
+                @endphp
                 <a href="{{ $link['href'] }}" :class="scrolled ? 'text-black' : 'text-white'"
-                    class="text-[16px] max-xl:text-[15px] font-normal hover:text-primary-orange transition-colors duration-300 whitespace-nowrap uppercase
-                                                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                    class="text-[16px] max-xl:text-[15px] hover:text-primary-orange transition-colors duration-300 whitespace-nowrap uppercase
+                            {{ $isActive ? 'font-bold' : 'font-normal' }}">
                     {{ $link['title'] }}
                 </a>
             @endforeach
@@ -86,7 +90,8 @@
         <div class="flex items-center gap-3 max-sm:gap-2">
             <!-- Botón Área clientes - Desktop y mobile -->
             <button @click="openModal('login')"
-                :class="scrolled ? 'border border-primary-orange text-primary-orange hover:bg-primary-orange hover:text-white' : 'text-primary-orange bg-white hover:border hover:border-primary-orange hover:bg-primary-orange hover:text-white'"
+                :class="scrolled ? 'border border-primary-orange text-primary-orange hover:bg-primary-orange hover:text-white' :
+                    'text-primary-orange bg-white hover:border hover:border-primary-orange hover:bg-primary-orange hover:text-white'"
                 class="text-sm max-sm:text-xs h-[36px] rounded-sm max-sm:h-[28px] w-[168px] max-sm:w-[80px] max-sm:px-2 transition-all duration-300 flex-shrink-0">
                 <span class="max-sm:hidden uppercase font-bold">Área clientes</span>
                 <span class="hidden max-sm:inline">Privada</span>
@@ -115,10 +120,16 @@
         class="lg:hidden absolute w-full bg-white border-t border-gray-200 shadow-lg z-40"
         @click.away="mobileMenuOpen = false">
         <div class="py-2 max-h-[calc(100vh-60px)] overflow-y-auto">
-            @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
+            @foreach ($isPrivate ? $privateLinks : $defaultLinks as $link)
+                @php
+                    $currentPath = '/' . request()->path();
+                    $linkPath = $link['href'];
+                    $isActive =
+                        $currentPath === $linkPath || ($linkPath !== '/' && str_starts_with($currentPath, $linkPath));
+                @endphp
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100 last:border-b-0 uppercase
-                                                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                            {{ $isActive ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>
@@ -259,27 +270,29 @@
                 </div>
 
                 <div class="max-md:col-span-1">
-                    <label for="register_provincia" class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
+                    <label for="register_provincia"
+                        class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
                         Provincia
                     </label>
                     <select name="provincia" id="register_provincia"
                         class="w-full px-3 py-2 max-sm:px-2 max-sm:py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-orange text-sm max-sm:text-xs">
                         <option value="">Seleccione una provincia</option>
-                        @foreach($provincias as $provincia)
+                        @foreach ($provincias as $provincia)
                             <option value="{{ $provincia->name }}">{{ $provincia->name }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="max-md:col-span-1">
-                    <label for="register_localidad" class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
+                    <label for="register_localidad"
+                        class="block text-sm max-sm:text-xs font-medium text-gray-700 mb-2">
                         Localidad
                     </label>
                     <select name="localidad" id="register_localidad"
                         class="w-full px-3 py-2 max-sm:px-2 max-sm:py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-orange text-sm max-sm:text-xs">
                         <option value="">Seleccione una localidad</option>
-                        @foreach($provincias as $provincia)
-                            @foreach($provincia->localidades as $localidad)
+                        @foreach ($provincias as $provincia)
+                            @foreach ($provincia->localidades as $localidad)
                                 <option value="{{ $localidad->name }}">{{ $localidad->name }}</option>
                             @endforeach
                         @endforeach

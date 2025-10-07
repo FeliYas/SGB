@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ListaDePrecios;
 use App\Models\Provincia;
 use App\Models\Sucursal;
 use App\Models\SucursalCliente;
@@ -26,7 +25,6 @@ class UserController extends Controller
         $sucursales = Sucursal::orderBy('name', 'asc')->get();
 
         $users = $query->paginate($perPage);
-        $listas = ListaDePrecios::select('id', 'name')->orderBy('name', 'asc')->get();
         $provincias = Provincia::orderBy('name', 'asc')->with('localidades')->get();
 
         $vendedores = User::where('rol', 'vendedor')->orderBy('name', 'asc')->get();
@@ -36,7 +34,6 @@ class UserController extends Controller
             'clientes' => $users,
             'provincias' => $provincias,
             'vendedores' => $vendedores,
-            'listas' => $listas,
             'sucursales' => $sucursales,
         ]);
     }
@@ -99,7 +96,6 @@ class UserController extends Controller
             'descuento_tres' => 'nullable|integer|min:0|max:100',
             'rol' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:20',
-            'lista_de_precios_id' => 'nullable|sometimes|exists:lista_de_precios,id',
             'autorizado' => 'nullable|boolean',
             'vendedor_id' => 'nullable|sometimes|exists:users,id',
 

@@ -14,7 +14,7 @@ class ListaDePreciosController extends Controller
     public function index()
     {
         // Esto devuelve una colección de modelos, no un solo modelo
-        $listaDePrecios = ListaDePrecios::where('id', auth()->user()->lista_de_precios_id)->get();
+        $listaDePrecios = ListaDePrecios::all();
 
         // Mapea la colección para añadir los atributos formato y peso a cada elemento
 

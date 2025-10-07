@@ -13,7 +13,7 @@
                 {!! $bannerPortada->text ?? '' !!}
             </div>
             <a href="{{ route('nosotros') }}"
-                class="py-2 px-6 bg-primary-orange text-white rounded-sm font-bold w-fit text-primary-red flex justify-center items-center hover:bg-white hover:text-primary-orange transition-colors duration-300 max-sm:self-center max-sm:mb-10">
+                class="py-2 px-6 uppercase bg-primary-orange text-white rounded-sm font-bold w-fit text-primary-red flex justify-center items-center hover:bg-white hover:text-primary-orange transition-colors duration-300 max-sm:self-center max-sm:mb-10">
                 Más info
             </a>
         </div>

@@ -43,7 +43,7 @@ const Navbar = () => {
                 <Link href="/" className="flex-shrink-0">
                     <img
                         src={logos?.logo_principal || ''}
-                        className="h-auto max-h-[50px] w-auto max-w-[80px] transition-all duration-300 md:max-h-[84px] md:max-w-[124px]"
+                        className="max-h-[71px] max-md:max-w-[100px] max-md:max-h-[68px] max-sm:max-w-[80px] max-sm:max-h-[54px] transition-all duration-300"
                         alt="Logo"
                     />
                 </Link>

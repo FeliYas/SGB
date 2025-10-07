@@ -1,8 +1,6 @@
 <div class="w-full h-auto min-h-[195px] max-lg:min-h-0 bg-black  flex items-center py-6 max-lg:py-4">
-    <form action="{{ route('productos') }}" method="GET"
+    <form action="{{ route('productos') }}" method="GET" id="searchForm"
         class="flex flex-col lg:flex-row gap-6 max-sm:gap-4 w-[1200px] max-xl:w-full max-xl:px-6 max-lg:px-4 max-sm:px-4 mx-auto h-auto lg:h-[123px] items-start lg:items-center">
-
-
 
         <!-- Sección: Por vehículo / Código -->
         <div class="flex flex-col w-full lg:w-full gap-4 max-sm:gap-3">
@@ -18,7 +16,7 @@
                     <label for="marca" class="text-[16px] max-sm:text-[14px] text-white ">Marca</label>
                     <div class="relative">
                         <select
-                            class="rounded-sm bg-white p-2 pr-10 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
+                            class="rounded-sm bg-white p-2 pr-2 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
                             name="marca" id="marca">
                             <option value="">Elegir marca</option>
                             @foreach ($marcas as $marcaItem)
@@ -46,7 +44,7 @@
                     <label for="modelo" class="text-[16px] max-sm:text-[14px] text-white ">Modelo</label>
                     <div class="relative">
                         <select
-                            class="rounded-sm bg-white p-2 pr-10 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
+                            class="rounded-sm bg-white p-2 pr-2 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
                             name="modelo" id="modelo">
                             <option value="">Elegir modelo</option>
                             @foreach ($modelos as $modeloItem)
@@ -73,7 +71,7 @@
                     <label for="tipo" class="text-[16px] max-sm:text-[14px] text-white ">Motor</label>
                     <div class="relative">
                         <select
-                            class="rounded-sm bg-white p-2 pr-10 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
+                            class="rounded-sm bg-white p-2 pr-2 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
                             name="motor" id="motor">
                             <option value="">Elegir el motor</option>
                             @foreach ($motores as $motorx)
@@ -101,7 +99,7 @@
                     <label for="codigo_original" class="text-[16px] max-sm:text-[14px] text-white ">Código</label>
                     <div class="relative">
                         <input value="{{ $code ?? '' }}" type="text"
-                            class="rounded-sm bg-white p-2 pr-10 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
+                            class="rounded-sm bg-white p-2 pr-2 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
                             id="codigo_original" name="code" placeholder="Ingrese código original">
                         @if($code ?? '')
                             <a href="{{ route('productos', array_filter(request()->except('code'))) }}"
@@ -122,7 +120,7 @@
                     <label for="codigo_sr" class="text-[16px] max-sm:text-[14px] text-white ">Código alternativo</label>
                     <div class="relative">
                         <input value="{{ $codeoem ?? '' }}" type="text"
-                            class="rounded-sm bg-white p-2 pr-10 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
+                            class="rounded-sm bg-white p-2 pr-2 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
                             id="codigo_oem" name="code_oem" placeholder="Ingrese código sr33">
                         @if($codeoem ?? '')
                             <a href="{{ route('productos', array_filter(request()->except('code_oem'))) }}"
@@ -142,7 +140,7 @@
                     <label for="tipo" class="text-[16px] max-sm:text-[14px] text-white ">Categoría</label>
                     <div class="relative">
                         <select
-                            class="rounded-sm bg-white p-2 pr-10 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
+                            class="rounded-sm bg-white p-2 pr-2 outline-transparent focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs"
                             name="tipo" id="tipo">
                             <option value="">Seleccionar categoria</option>
                             @foreach ($categorias as $categoria)
@@ -167,13 +165,31 @@
             </div>
         </div>
 
-        <!-- Botón de búsqueda -->
-        <div class="flex flex-col items-center h-full lg:items-end justify-end w-full lg:w-fit gap-2 mt-4 lg:mt-0">
-            <button type="submit"
-                class="bg-primary-orange text-white rounded-sm px-6 py-2 max-sm:px-4 max-sm:py-1.5 text-[16px] max-sm:text-[14px] font-semibold hover:bg-primary-orange-dark transition duration-300 w-full lg:w-auto min-w-[120px] max-sm:min-w-[100px]">
-                Buscar
-            </button>
-        </div>
-
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('searchForm');
+    const selects = form.querySelectorAll('select');
+    const inputs = form.querySelectorAll('input[type="text"]');
+    let searchTimeout;
+
+    // Para los select, enviar inmediatamente al cambiar
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            form.submit();
+        });
+    });
+
+    // Para los inputs de texto, usar timeout de 800ms
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                form.submit();
+            }, 800);
+        });
+    });
+});
+</script>

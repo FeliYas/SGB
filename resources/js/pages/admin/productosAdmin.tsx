@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import Select from 'react-select';
 import Dashboard from './dashboard';
+import { log } from 'console';
 
 export default function ProductosAdmin() {
     const { productos, categorias, marcas, modelos, motores } = usePage().props;
@@ -21,6 +22,7 @@ export default function ProductosAdmin() {
         modelos: [],
         motores: [],
     });
+
 
     const [searchTerm, setSearchTerm] = useState('');
     const [createView, setCreateView] = useState(false);
@@ -271,16 +273,15 @@ export default function ProductosAdmin() {
 
                                         <label htmlFor="modelo">Modelos</label>
                                         <Select
-                                            options={modelos
-                                                ?.filter((mod) => mod?.marca_id == data.marca_id)
-                                                ?.map((modelo) => ({
-                                                    value: modelo.id,
-                                                    label: modelo.name,
-                                                }))}
+                                            options={modelos?.map((modelo) => ({
+                                                value: modelo.id,
+                                                label: modelo.name,
+                                            }))}
                                             onChange={(options) => setModeloSelected(options)}
                                             className=""
                                             name="modelo"
                                             id="modelo"
+                                            placeholder="Seleccionar modelos..."
                                             isMulti
                                         />
 
@@ -294,6 +295,7 @@ export default function ProductosAdmin() {
                                             className=""
                                             name="motor"
                                             id="motor"
+                                            placeholder="Seleccionar motores..."
                                             isMulti
                                         />
 
@@ -304,15 +306,6 @@ export default function ProductosAdmin() {
                                             name="precio"
                                             id="precio"
                                             onChange={(e) => setData('precio', e.target.value)}
-                                        />
-
-                                        <label htmlFor="stock">Stock</label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="number"
-                                            name="stock"
-                                            id="stock"
-                                            onChange={(e) => setData('stock', e.target.value)}
                                         />
 
                                         <label>Imágenes del Producto</label>

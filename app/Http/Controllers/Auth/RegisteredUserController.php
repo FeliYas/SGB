@@ -28,7 +28,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->validate([
             'name' => "required|string|max:255",
             'email' => "sometimes|nullable|string|email|max:255|unique:users,email",
@@ -83,5 +82,7 @@ class RegisteredUserController extends Controller
                 ]);
             }
         }
+
+        return redirect('/')->with('success', 'Registro exitoso. Espere a ser autorizado, recibirá un correo electrónico con más detalles.');
     }
 }

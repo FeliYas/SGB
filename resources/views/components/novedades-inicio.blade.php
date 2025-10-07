@@ -6,7 +6,7 @@
         <div class="flex flex-row gap-4 sm:flex-row sm:items-center justify-between sm:gap-0 max-sm:gap-3">
             <h2 class="text-2xl font-bold sm:text-2xl md:text-3xl max-sm:text-xl">Novedades</h2>
             <a href="{{ url('/novedades') }}"
-                class="text-primary-orange border-primary-orange hover:bg-primary-orange flex h-[41px] max-sm:h-[36px] w-[127px] max-sm:w-[100px] items-center justify-center border text-base max-sm:text-sm font-semibold transition duration-300 hover:text-white rounded-sm">
+                class="text-primary-orange uppercase border-primary-orange hover:bg-primary-orange flex h-[41px] max-sm:h-[36px] w-[127px] max-sm:w-[100px] items-center justify-center border text-base max-sm:text-sm font-semibold transition duration-300 hover:text-white rounded-sm">
                 Ver todas
             </a>
         </div>

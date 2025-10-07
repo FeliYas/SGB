@@ -18,6 +18,7 @@ use App\Http\Controllers\MarcaProductoController;
 use App\Http\Controllers\MetadatosController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\MotorController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\NosotrosController;
 use App\Http\Controllers\NovedadesController;
 use App\Http\Controllers\PedidoController;
@@ -152,6 +153,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/listadeprecios', [ListaDePreciosController::class, 'store'])->name('admin.listadeprecios.store');
     Route::post('admin/listadeprecios/update', [ListaDePreciosController::class, 'update'])->name('admin.listadeprecios.update');
     Route::delete('admin/listadeprecios/destroy', [ListaDePreciosController::class, 'destroy'])->name('admin.listadeprecios.destroy');
+
+    Route::get('admin/newsletter', [NewsletterController::class, 'index'])->name('admin.newsletter');
+    Route::delete('/admin/newsletter/{id}', [NewsletterController::class, 'destroy'])->name('admin.newsletter.destroy');
 
     Route::get('admin/logos', [LogosController::class, 'index'])->name('admin.logos');
     Route::post('admin/logos', [LogosController::class, 'update'])->name('admin.logos.update');

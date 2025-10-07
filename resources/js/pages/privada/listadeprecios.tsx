@@ -15,7 +15,7 @@ export default function ListaDePrecios() {
             <div className="mx-auto min-h-[50vh] w-[1200px] py-20 max-sm:w-full">
                 <div className="col-span-2 grid w-full items-start">
                     <div className="w-full">
-                        <div className="bg-primary-orange grid h-[52px] grid-cols-5 items-center rounded-t-sm text-white max-sm:hidden">
+                        <div className="bg-black grid h-[52px] grid-cols-5 items-center rounded-t-sm text-white max-sm:hidden">
                             <p></p>
                             <p>Nombre</p>
                             <p>Formato</p>

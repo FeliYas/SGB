@@ -149,17 +149,16 @@ export default function ProductosPrivada({ categorias, subcategorias }) {
                 <SearchBar />
                 <div className="mx-auto mt-10 flex w-[1200px] flex-col gap-2 max-sm:w-full max-sm:px-4">
                     <div className="w-full">
-                        <div className="grid h-[52px] grid-cols-10 items-center rounded-t-sm bg-black text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
+                        <div className="grid h-[52px] grid-cols-9 items-center rounded-t-sm bg-black text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
                             <p className="max-sm:hidden"></p>
                             <p className="max-sm:hidden">Código</p>
                             <p>Marca</p>
-                            <p>Descripcion</p>
                             <p className="">Categoria</p>
-                            <p className="text-right max-sm:hidden">Precio</p>
+                            <p className="text-center max-sm:hidden">Precio</p>
                             <p className="text-center max-sm:hidden">Descuentos</p>
-                            <p className="text-right max-sm:hidden">Precio con descuento</p>
+                            <p className="text-center max-sm:hidden">Precio con descuento</p>
                             <p className="text-center max-sm:hidden">Cantidad</p>
-                            <p className="text-center max-sm:hidden">Stock</p>
+                            <p className="text-center max-sm:hidden"></p>
                             <p></p>
                         </div>
                         {productos?.data?.map((producto, index) => (

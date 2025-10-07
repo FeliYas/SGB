@@ -111,26 +111,13 @@ export default function Informacion() {
                                         className="max-sm:rows-4 border border-[#4D565D] pl-2"
                                     />
                                 </div>
-                                <div className="col-span-2 flex flex-col justify-center gap-2 max-sm:col-span-1">
+                                <div className="col-span-2 flex flex-col justify-center gap-2 max-sm:col-span-1 w-[80%]">
                                     <label htmlFor="adjunto">Adjuntar archivos</label>
                                     <div className="flex h-[45px] flex-row items-center justify-between border border-[#4D565D] px-2 pl-2">
                                         <input onChange={(e) => setData('archivo', e.target.files[0])} type="file" id="adjunto" className="w-full" />
                                         <label htmlFor="adjunto" className="cursor-pointer">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="20"
-                                                height="20"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="#0072c6"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="lucide lucide-upload-icon lucide-upload"
-                                            >
-                                                <path d="M12 3v12" />
-                                                <path d="m17 8-5-5-5 5" />
-                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M2 16C1.45 16 0.979002 15.804 0.587002 15.412C0.195002 15.02 -0.000664969 14.5493 1.69779e-06 14V11H2V14H14V11H16V14C16 14.55 15.804 15.021 15.412 15.413C15.02 15.805 14.5493 16.0007 14 16H2ZM7 12V3.85L4.4 6.45L3 5L8 0L13 5L11.6 6.45L9 3.85V12H7Z" fill="#FF120B"/>
                                             </svg>
                                         </label>
                                     </div>

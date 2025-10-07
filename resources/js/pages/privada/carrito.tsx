@@ -117,17 +117,16 @@ export default function Carrito({
 
                 <div className="col-span-2 grid w-full items-start">
                     <div className="w-full">
-                        <div className="grid h-[52px] grid-cols-10 items-center rounded-t-sm bg-black text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
+                        <div className="grid h-[52px] grid-cols-9 items-center rounded-t-sm bg-black text-white max-sm:hidden max-sm:h-[40px] max-sm:grid-cols-4 max-sm:text-[12px]">
                             <p className="max-sm:hidden"></p>
                             <p className="max-sm:hidden">Código</p>
                             <p>Marca</p>
-                            <p>Descripcion</p>
                             <p className="">Categoria</p>
-                            <p className="text-right max-sm:hidden">Precio</p>
+                            <p className="text-center max-sm:hidden">Precio</p>
                             <p className="text-center max-sm:hidden">Descuentos</p>
-                            <p className="text-right max-sm:hidden">Precio con descuento</p>
+                            <p className="text-center max-sm:hidden">Precio con descuento</p>
                             <p className="text-center max-sm:hidden">Cantidad</p>
-                            <p className="text-center max-sm:hidden">Stock</p>
+                            <p className="text-center max-sm:hidden"></p>
                             <p></p>
                         </div>
                         {productos?.map((producto) => <ProductosPrivadaRow key={producto?.id} producto={producto} />)}
@@ -145,8 +144,8 @@ export default function Carrito({
                     </div>
                 </div>
 
-                <div className="h-[206px] rounded-sm border max-sm:order-1 max-sm:col-span-2">
-                    <div className="rounded-t-sm bg-black text-white">
+                <div className="h-[206px] border max-sm:order-1 max-sm:col-span-2">
+                    <div className="bg-black text-white">
                         <h2 className="p-3 text-xl font-bold">Informacion importante</h2>
                     </div>
                     <div
@@ -157,8 +156,8 @@ export default function Carrito({
                     ></div>
                 </div>
 
-                <div className="h-fit w-full rounded-sm border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
-                    <div className="rounded-t-sm bg-black p-3 text-white">
+                <div className="h-fit w-full border max-sm:order-3 max-sm:col-span-2">
+                    <div className="bg-black p-3 text-white">
                         <h2 className="text-xl font-bold">Entrega</h2>
                     </div>
 
@@ -216,7 +215,7 @@ export default function Carrito({
                         onChange={(e) => {
                             pedidoForm.setData('mensaje', e.target.value);
                         }}
-                        className="h-[222px] w-full rounded-sm border p-3"
+                        className="h-[222px] w-full border p-3"
                         name=""
                         id=""
                         rows={10}
@@ -224,8 +223,8 @@ export default function Carrito({
                     ></textarea>
                 </div>
 
-                <div className="h-fit w-full rounded-sm border bg-gray-50 max-sm:order-3 max-sm:col-span-2">
-                    <div className="rounded-t-sm bg-black p-3">
+                <div className="h-fit w-full border max-sm:order-3 max-sm:col-span-2">
+                    <div className="bg-black p-3">
                         <h2 className="text-xl font-bold text-white">Formas de pago</h2>
                     </div>
 
@@ -252,13 +251,13 @@ export default function Carrito({
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-3 rounded-sm max-sm:order-4 max-sm:col-span-2">
+                <div className="flex flex-col gap-3 max-sm:order-4 max-sm:col-span-2">
                     <h2 className="text-2xl font-bold">Adjuntar un archivo</h2>
-                    <div className="flex w-full items-center justify-between rounded-sm border">
+                    <div className="flex w-full items-center justify-between border">
                         <span className="pl-4 text-gray-600">{pedidoForm?.data?.archivo?.name}</span>
                         <label
                             htmlFor="fileInput"
-                            className="text-primary-orange h-full cursor-pointer rounded-r-sm bg-gray-100 p-4 font-semibold hover:bg-gray-200"
+                            className="text-primary-orange h-full cursor-pointer bg-gray-100 p-4 font-semibold hover:bg-gray-200"
                         >
                             ADJUNTAR
                         </label>
@@ -273,12 +272,12 @@ export default function Carrito({
                     </div>
                 </div>
 
-                <div className="h-fit rounded-sm border max-sm:order-5 max-sm:col-span-2">
-                    <div className="rounded-t-sm bg-black text-white">
+                <div className="h-fit border max-sm:order-5 max-sm:col-span-2">
+                    <div className="bg-black text-white">
                         <h2 className="p-3 text-xl font-bold">Pedido</h2>
                     </div>
 
-                    <div className="flex flex-col justify-between gap-4 border-b px-4 py-4 text-xl text-[18px] text-[#74716A]">
+                    <div className="flex flex-col justify-between gap-4 border-b px-4 py-4 text-xl text-[18px] text-black">
                         <div className="flex w-full flex-row justify-between">
                             <p>Subtotal</p>
                             <p>
@@ -320,7 +319,7 @@ export default function Carrito({
                             </p>
                         </div>
                     </div>
-                    <div className="flex flex-row justify-between p-3 text-[#74716A]">
+                    <div className="flex flex-row justify-between p-3">
                         <p className="text-2xl font-medium">
                             Total <span className="text-base">{'(IVA incluido)'}</span>
                         </p>

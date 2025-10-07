@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import Dashboard from './dashboard';
 
 export default function Clientes() {
-    const { clientes, provincias, listas } = usePage().props;
+    const { clientes, provincias } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
         name: '',
@@ -25,7 +25,6 @@ export default function Clientes() {
         descuento_uno: 0,
         descuento_dos: 0,
         descuento_tres: 0,
-        lista_de_precios_id: '',
         rol: 'cliente',
         autorizado: 1,
     });
@@ -209,26 +208,6 @@ export default function Clientes() {
                                             id="telefono"
                                             required
                                         />
-                                    </div>
-
-                                    <div className="flex flex-col gap-2">
-                                        <label htmlFor="lista">Lista</label>
-                                        <select
-                                            onChange={(ev) => signupForm.setData('lista_de_precios_id', ev.target.value)}
-                                            className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
-                                            name="lista_de_precios_id"
-                                            id="lista_de_precios_id"
-                                        >
-                                            <option disabled selected value="">
-                                                Selecciona una lista
-                                            </option>
-
-                                            {listas?.map((lista) => (
-                                                <option key={lista.id} value={lista.id}>
-                                                    {lista.name}
-                                                </option>
-                                            ))}
-                                        </select>
                                     </div>
 
                                     <div className="col-span-2 grid grid-cols-3 gap-4">
@@ -418,7 +397,6 @@ export default function Clientes() {
                                     <td className="text-left">EMAIL</td>
                                     <td className="py-2 text-left">PROVINCIA</td>
                                     <td className="text-left">LOCALIDAD</td>
-                                    <td className="text-center">LISTA</td>
                                     <td className="text-center">AUTORIZADO</td>
                                     <td className="text-center">EDITAR</td>
                                 </tr>

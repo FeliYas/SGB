@@ -1,10 +1,11 @@
 import { router, useForm, usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const SearchBar = () => {
     const { categorias, marcas, modelos, motores, filters } = usePage().props;
+    const debounceTimer = useRef(null);
 
-    const { data, setData, get } = useForm({
+    const { data, setData } = useForm({
         categoria: filters?.categoria || '',
         marca: filters?.marca || '',
         modelo: filters?.modelo || '',
@@ -25,34 +26,43 @@ const SearchBar = () => {
         });
     }, [filters]);
 
-    // Función para manejar el envío del formulario
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        get(route('index.privada.productos'), {
+    // Función para ejecutar la búsqueda
+    const performSearch = (searchData) => {
+        // Limpiar filtros vacíos
+        const cleanedFilters = {};
+        Object.keys(searchData).forEach((key) => {
+            if (searchData[key]) {
+                cleanedFilters[key] = searchData[key];
+            }
+        });
+
+        router.get(route('index.privada.productos'), cleanedFilters, {
             preserveState: true,
             preserveScroll: true,
         });
     };
 
+    // Efecto para búsqueda automática con debounce
+    useEffect(() => {
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+
+        debounceTimer.current = setTimeout(() => {
+            performSearch(data);
+        }, 500);
+
+        // Cleanup
+        return () => {
+            if (debounceTimer.current) {
+                clearTimeout(debounceTimer.current);
+            }
+        };
+    }, [data.categoria, data.marca, data.modelo, data.motor, data.code, data.code_oem]);
+
     // Función para eliminar un filtro específico
     const removeFilter = (filterName) => {
-        // Actualizar el estado local primero
         setData(filterName, '');
-
-        const newFilters = { ...data };
-        delete newFilters[filterName];
-
-        // Limpiar filtros vacíos
-        Object.keys(newFilters).forEach((key) => {
-            if (!newFilters[key]) {
-                delete newFilters[key];
-            }
-        });
-
-        router.get(route('index.privada.productos'), newFilters, {
-            preserveState: true,
-            preserveScroll: true,
-        });
     };
 
     // Componente para el botón de eliminar filtro
@@ -75,15 +85,12 @@ const SearchBar = () => {
 
     return (
         <div className="flex min-h-[195px] w-full items-center bg-black py-4 md:h-[195px] md:py-0">
-            <form
-                onSubmit={handleSubmit}
-                className="mx-auto flex h-auto w-full max-w-[1200px] flex-col items-center gap-6 px-4 py-4 md:h-[123px] md:w-[1200px] md:flex-row md:px-0 md:py-0"
-            >
+            <div className="mx-auto flex h-auto w-full max-w-[1200px] flex-col items-center gap-6 px-4 py-4 md:h-[123px] md:w-[1200px] md:flex-row md:px-0 md:py-0">
                 {/* Sección de vehículo/código */}
                 <div className="flex w-full flex-col gap-4 md:w-full">
                     <h2 className="border-b pb-1 text-[20px] font-bold text-white md:text-[24px]">Por vehículo / Código</h2>
 
-                    <div className="flex flex-col gap-4 md:flex-row md:gap-6">
+                    <div className="flex flex-col gap-4 md:flex-row">
                         {/* Marca */}
                         <div className="flex w-full flex-col gap-2">
                             <label htmlFor="marca" className="text-[14px] text-white md:text-[16px]">
@@ -91,7 +98,7 @@ const SearchBar = () => {
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="marca"
                                     id="marca"
                                     value={data.marca}
@@ -115,7 +122,7 @@ const SearchBar = () => {
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="modelo"
                                     id="modelo"
                                     value={data.modelo}
@@ -140,7 +147,7 @@ const SearchBar = () => {
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="motor"
                                     id="motor"
                                     value={data.motor}
@@ -165,7 +172,7 @@ const SearchBar = () => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     id="codigo_original"
                                     name="codigo_original"
                                     placeholder="Ingrese código original"
@@ -184,7 +191,7 @@ const SearchBar = () => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     id="codigo_sr"
                                     name="codigo_sr"
                                     placeholder="Ingrese código sr33"
@@ -200,7 +207,7 @@ const SearchBar = () => {
                             </label>
                             <div className="relative">
                                 <select
-                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 pr-10 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
+                                    className="focus:outline-primary-orange w-full rounded-sm bg-white p-2 text-sm outline-transparent transition duration-300 focus:outline md:text-base"
                                     name="tipo"
                                     id="tipo"
                                     value={data.categoria}
@@ -218,17 +225,7 @@ const SearchBar = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Botón de búsqueda */}
-                <div className="flex w-full flex-col items-center justify-center gap-2 md:h-full md:w-fit md:items-end md:justify-end">
-                    <button
-                        type="submit"
-                        className="bg-primary-orange hover:bg-primary-orange-dark w-full rounded-sm px-4 py-2 text-[14px] font-semibold text-white transition duration-300 md:w-auto md:text-[16px]"
-                    >
-                        Buscar
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     );
 };

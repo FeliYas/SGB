@@ -13,7 +13,7 @@ export default function Mispedidos() {
             <div className="mx-auto min-h-[40vh] max-w-[1200px] py-20 max-sm:p-10">
                 <div className="col-span-2 grid w-full items-start">
                     <div className="w-full">
-                        <div className="bg-primary-orange grid h-[52px] grid-cols-7 items-center rounded-t-sm text-white max-sm:hidden">
+                        <div className="bg-black grid h-[52px] grid-cols-7 items-center rounded-t-sm text-white max-sm:hidden">
                             <p></p>
                             <p>Nº de pedido</p>
                             <p>Fecha de compra</p>

@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
+use function Pest\Laravel\get;
+
 class ProductoController extends Controller
 {
     /**
@@ -76,75 +78,80 @@ class ProductoController extends Controller
 
     public function indexVistaPrevia(Request $request)
     {
-        // Construir query base para productos
-        $query = Producto::query();
+        try {
+            // Construir query base para productos
+            $query = Producto::query();
 
-        // Filtro por categoría (a través de marcas)
-        if ($request->filled('tipo')) {
-            $query->where('categoria_id', $request->tipo);
+            // Filtro por categoría (a través de marcas)
+            if ($request->filled('tipo')) {
+                $query->where('categoria_id', $request->tipo);
+            }
+
+            // Filtro por modelo/subcategoría
+            if ($request->filled('marca')) {
+                $query->where('marca_id', $request->marca);
+            }
+
+            if ($request->filled('modelo')) {
+                $query->whereHas('modelos', function ($q) use ($request) {
+                    $q->where('modelo_id', $request->modelo);
+                });
+            }
+
+            if ($request->filled('motor')) {
+                $query->whereHas('motores', function ($q) use ($request) {
+                    $q->where('motor_id', $request->motor);
+                });
+            }
+
+            // Filtro por código
+            if ($request->filled('code')) {
+                $query->where('code', 'LIKE', '%' . $request->code . '%');
+            }
+
+            // Filtro por código OEM
+            if ($request->filled('code_oem')) {
+                $query->where('code_oem', 'LIKE', '%' . $request->code_oem . '%');
+            }
+
+            // Aplicar ordenamiento por defecto
+            $query->orderBy('order', 'asc');
+
+            // Ejecutar query con paginación
+            $productos = $query->with(['marca', 'modelos', 'imagenes', 'categoria'])
+                ->paginate(15)
+                ->appends($request->query());
+
+            // Cargar datos adicionales para la vista
+            $categorias = Categoria::with('subCategorias')->orderBy('order', 'asc')->get();
+            $marcas = Marca::orderBy('order', 'asc')->get();
+            $modelos = Modelo::orderBy('order', 'asc')->get();
+            $motores = Motor::orderBy('order', 'asc')->get();
+
+            return view('productos', [
+                'categorias' => $categorias,
+                'productos' => $productos,
+                'tipo' => $request->tipo,
+                'marca' => $request->marca,
+                'modelo' => $request->modelo,
+                'code' => $request->code,
+                'code_oem' => $request->code_oem,
+                'marcas' => $marcas,
+                'modelos' => $modelos,
+                'motores' => $motores,
+                'motor' => $request->motor,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al cargar la vista previa de productos',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        // Filtro por modelo/subcategoría
-        if ($request->filled('marca')) {
-            $query->where('marca_id', $request->marca);
-        }
-
-        if ($request->filled('modelo')) {
-            $query->where('modelo_id', $request->modelo);
-        }
-
-        if ($request->filled('motor')) {
-            $query->where('motor_id', $request->motor);
-        }
-
-        // Filtro por código
-        if ($request->filled('code')) {
-            $query->where('code', 'LIKE', '%' . $request->code . '%');
-        }
-
-        // Filtro por código OEM
-        if ($request->filled('code_oem')) {
-            $query->where('code_oem', 'LIKE', '%' . $request->code_oem . '%');
-        }
-
-
-        // Aplicar ordenamiento por defecto
-        $query->orderBy('order', 'asc');
-
-        // Ejecutar query con paginación
-        $productos = $query->with(['marca', 'modelos', 'imagenes', 'categoria'])
-            ->paginate(15)
-            ->appends($request->query());
-
-        // Si solo hay un producto en total (no en la página actual), redirigir
-        /* if ($productos->total() === 1) {
-            return redirect('/p/' . $productos->first()->code);
-        } */
-
-        // Cargar datos adicionales para la vista
-        $categorias = Categoria::with('subCategorias')->orderBy('order', 'asc')->get();
-        $marcas = Marca::orderBy('order', 'asc')->get();
-        $modelos = Modelo::orderBy('order', 'asc')->get();
-        $motores = Motor::orderBy('order', 'asc')->get();
-
-        return view('productos', [
-            'categorias' => $categorias,
-            'productos' => $productos,
-            'tipo' => $request->tipo,
-            'marca' => $request->marca,
-            'modelo' => $request->modelo,
-            'code' => $request->code,
-            'code_oem' => $request->code_oem,
-            'marcas' => $marcas,
-            'modelos' => $modelos,
-            'motores' => $motores,
-            'motor' => $request->motor,
-
-        ]);
     }
 
     public function show($codigo, Request $request)
     {
+        try {
         $producto = Producto::with(['categoria:id,name', 'imagenes', 'marca', 'modelos'])->where('code', $codigo)->first();
 
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
@@ -152,8 +159,8 @@ class ProductoController extends Controller
         $categorias = Categoria::select('id', 'name', 'order')->orderBy('order', 'asc')->get();
 
         // Obtener productos relacionados por marca y modelo
-        $productosRelacionados = Producto::where('id', '!=', $producto->id)->with(['categoria:id,name', 'imagenes', 'marca', 'modelo'])->orderBy('order', 'asc')->limit(3)->get();
-
+        $productosRelacionados = Producto::where('id', '!=', $producto->id)->with(['categoria:id,name', 'imagenes', 'marca', 'modelos'])->orderBy('order', 'asc')->limit(3)->get();
+        
         return view('producto', [
             'producto' => $producto,
             'categorias' => $categorias,
@@ -162,6 +169,12 @@ class ProductoController extends Controller
             'productosRelacionados' => $productosRelacionados,
             'modelo_id' => $request->modelo_id ?? null
         ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al cargar el producto',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
     public function indexPrivada(Request $request)
     {
@@ -184,11 +197,15 @@ class ProductoController extends Controller
         }
 
         if ($request->filled('modelo')) {
-            $query->where('modelo_id', $request->modelo);
+            $query->whereHas('modelos', function ($q) use ($request) {
+                $q->where('modelo_id', $request->modelo);
+            });
         }
 
         if ($request->filled('motor')) {
-            $query->where('motor_id', $request->modelo);
+            $query->whereHas('motores', function ($q) use ($request) {
+                $q->where('motor_id', $request->motor);
+            });
         }
 
         // Filtro por código
@@ -411,7 +428,6 @@ class ProductoController extends Controller
             'descuento' => 'nullable|sometimes|integer|min:0|max:100',
             'medidas' => 'nullable|string',
             'precio' => 'nullable|numeric|min:0',
-            'stock' => 'nullable|integer|min:0',
             'categoria_id' => 'nullable|exists:categorias,id',
             'marca_id' => 'nullable|exists:marcas,id',
             'modelos' => 'nullable|array',
@@ -437,7 +453,6 @@ class ProductoController extends Controller
                     'descuento' => $data['descuento'] ?? 0,
                     'medidas' => $data['medidas'] ?? null,
                     'precio' => $data['precio'] ?? 0.00,
-                    'stock' => $data['stock'] ?? 0,
                     'categoria_id' => $data['categoria_id'] ?? null,
                     'marca_id' => $data['marca_id'] ?? null,
 
@@ -507,7 +522,6 @@ class ProductoController extends Controller
             'descuento' => 'nullable|sometimes|integer|min:0|max:100',
             'medidas' => 'nullable|string',
             'precio' => 'nullable|numeric|min:0',
-            'stock' => 'nullable|integer|min:0',
             'categoria_id' => 'nullable|exists:categorias,id',
             'marca_id' => 'nullable|exists:marcas,id',
             'motores' => 'nullable|array',
@@ -540,7 +554,6 @@ class ProductoController extends Controller
                     'descuento' => $data['descuento'] ?? 0,
                     'medidas' => $data['medidas'] ?? null,
                     'precio' => $data['precio'] ?? 0.00,
-                    'stock' => $data['stock'] ?? 0,
                     'categoria_id' => $data['categoria_id'] ?? null,
                     'marca_id' => $data['marca_id'] ?? null,
                 ]);
@@ -571,6 +584,14 @@ class ProductoController extends Controller
 
                 // Actualizar otros campos del producto
                 if ($request->has('modelos')) {
+                    // Obtener los modelos actuales del producto
+                    $modelosActuales = ProductoModelo::where('producto_id', $producto->id)
+                    ->get();
+
+                    foreach ($modelosActuales as $modelo) {
+                        $modelo->delete();
+                    }
+                    
                     foreach ($data['modelos'] as $modeloId) {
                         ProductoModelo::create([
                             'producto_id' => $producto->id,
@@ -580,6 +601,13 @@ class ProductoController extends Controller
                 }
 
                 if ($request->has('motores')) {
+                    $motoresActuales = ProductoMotor::where('producto_id', $producto->id)
+                        ->get();
+
+                    foreach ($motoresActuales as $motor) {
+                        $motor->delete();
+                    }
+
                     foreach ($data['motores'] as $motorId) {
                         ProductoMotor::create([
                             'producto_id' => $producto->id,
@@ -726,8 +754,8 @@ class ProductoController extends Controller
                 $producto->name,
                 $producto->unidad_pack ?? 1,
                 $tieneOfertaVigente
-                    ? $producto->precio->precio * (1 - $producto->descuento_oferta / 100)
-                    : $producto->precio->precio,
+                    ? $producto->precio * (1 - $producto->descuento_oferta / 100)
+                    : $producto->precio,
                 0
             );
 

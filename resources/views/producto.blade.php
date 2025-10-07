@@ -7,13 +7,16 @@
 @section('content')
     <div class="flex flex-col gap-10 max-sm:gap-6">
         <!-- Breadcrumb navigation -->
-        <div class="hidden lg:block w-[1200px] mx-auto h-full mt-10 max-sm:hidden">
+        <div class="hidden lg:block w-[1200px] mx-auto h-full mt-6 max-sm:hidden text-sm">
             <div class="text-black">
                 <a href="{{ route('home') }}" class="hover:underline transition-all duration-300 font-bold">Inicio</a>
-                <span class="mx-[2px]">/</span>
+                <span class="">></span>
                 <a href="{{ route('productos') }}"
                     class="hover:underline transition-all duration-300 font-bold">Productos</a>
-                <span class="mx-[2px]">/</span>
+                <span class="">></span>
+                <a href="{{ route('productos', ['id' => $producto->categoria->id]) }}"
+                    class="hover:underline transition-all duration-300 font-bold">{{ $producto->categoria->name ?? '' }}</a>
+                <span class="">></span>
                 <a href="{{"/" . $producto->code }}"
                     class="font-light hover:underline transition-all duration-300">{{ $producto->code ?? '' }}</a>
             </div>

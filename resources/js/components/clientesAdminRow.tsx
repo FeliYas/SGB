@@ -9,7 +9,7 @@ import UserSwitch from './switch';
 export default function ClientesAdminRow({ cliente }) {
     const [edit, setEdit] = useState(false);
 
-    const { provincias, listas } = usePage().props;
+    const { provincias } = usePage().props;
 
     const updateForm = useForm({
         name: cliente?.name,
@@ -19,7 +19,6 @@ export default function ClientesAdminRow({ cliente }) {
         cuit: cliente?.cuit,
         direccion: cliente?.direccion,
         telefono: cliente?.telefono,
-        lista_de_precios_id: cliente?.lista_de_precios_id,
         descuento_uno: cliente?.descuento_uno,
         descuento_dos: cliente?.descuento_dos,
         descuento_tres: cliente?.descuento_tres,
@@ -67,7 +66,6 @@ export default function ClientesAdminRow({ cliente }) {
             <td className="text-left">{cliente?.email}</td>
             <td className="text-left">{cliente?.provincia}</td>
             <td className="text-left">{cliente?.localidad}</td>
-            <td className="h-[90px] text-center">{cliente?.lista_de_precios_id}</td>
             <td className="flex h-[90px] items-center justify-center">
                 <UserSwitch routeName="admin.clientes.autorizar" id={cliente?.id} status={cliente?.autorizado == 1} />
             </td>
@@ -189,27 +187,6 @@ export default function ClientesAdminRow({ cliente }) {
                                         id="telefono"
                                         required
                                     />
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <label htmlFor="lista">Lista</label>
-                                    <select
-                                        value={updateForm?.data?.lista_de_precios_id}
-                                        onChange={(ev) => updateForm.setData('lista_de_precios_id', ev.target.value)}
-                                        className="focus:outline-primary-orange h-[45px] w-full pl-3 outline-1 outline-[#DDDDE0] transition duration-300"
-                                        name="lista_de_precios_id"
-                                        id="lista_de_precios_id"
-                                    >
-                                        <option disabled selected value="">
-                                            Selecciona una lista
-                                        </option>
-
-                                        {listas?.map((lista) => (
-                                            <option key={lista.id} value={lista.id}>
-                                                {lista.name}
-                                            </option>
-                                        ))}
-                                    </select>
                                 </div>
 
                                 <div className="col-span-2 grid grid-cols-3 gap-4">
